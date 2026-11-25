@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="mn" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Сумын унаа PRO: Safe Edition — AI Туслах & Аюулгүй Тээвэр</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        steppe: {
+                            950: '#070D19',
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .glass-header {
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .plate-badge {
+            font-family: 'Inter', monospace;
+            letter-spacing: 0.06em;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(24px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-modal {
+            animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .seat-btn {
+            transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .seat-btn:active:not(:disabled) {
+            transform: scale(0.94);
+        }
+    </style>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#172554">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900 dark:bg-steppe-950 dark:text-slate-100 pb-28 sm:pb-12">
+
+    <!-- ==================== TOP APP HEADER ==================== -->
+    <header class="sticky top-0 z-30 glass-header bg-gradient-to-r from-blue-950/95 via-blue-900/95 to-sky-900/95 dark:from-steppe-900/95 dark:via-slate-900/95 dark:to-blue-950/95 text-white border-b border-white/10 shadow-lg">
+        <div class="max-w-3xl mx-auto px-4 py-3.5">
+            <div class="flex items-center justify-between gap-2">
+                <!-- Brand -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')" ondblclick="openAdminPanel()" title="Админ орох бол 2 давхар товшино уу">
+                    <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md border border-amber-200/50 shrink-0">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                        <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-blue-950 flex items-center justify-center">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                        </span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h1 class="text-lg sm:text-xl font-black tracking-tight leading-none">Сумын унаа</h1>
+                            <span class="px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wider bg-amber-500 text-slate-950 rounded-md">PRO AI</span>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-sky-200 font-medium mt-0.5 flex items-center gap-1">
+                            <span class="text-amber-300 font-bold">Safe AI Edition</span> • Ухаалаг Туслах & Үнэлгээ
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Controls -->
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                    <button onclick="openAdminPanel()" id="headerAdminBtn" class="hidden flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-200 text-xs font-black transition-all active:scale-95">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
+                        <span id="headerAdminText">Админ</span>
+                    </button>
+                    <button onclick="switchTab('ai')" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 text-xs font-black shadow-sm transition-all active:scale-95">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">AI Туслах</span>
+                    </button>
+                    <button onclick="switchTab('driver')" id="headerDriverPill" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-bold transition-all">
+                        <i data-lucide="user-check" class="w-4 h-4 text-amber-400"></i>
+                        <span id="headerDriverText" class="hidden sm:inline">Үнэмлэх</span>
+                    </button>
+                    <button onclick="toggleDarkMode()" title="Өдөр / Шөнийн горим" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-amber-300 transition-all active:scale-95">
+                        <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4"></i>
+                        <i data-lucide="sun" id="themeIconSun" class="w-4 h-4 hidden"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop Top Nav -->
+            <nav class="hidden sm:grid grid-cols-5 gap-2 mt-3.5 bg-black/25 p-1.5 rounded-2xl border border-white/10">
+                <button onclick="switchTab('home')" data-nav="home" class="nav-tab-desktop flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold bg-white text-blue-950 shadow-sm transition-all">
+                    <i data-lucide="compass" class="w-4 h-4"></i>
+                    <span>Унаа хайх</span>
+                </button>
+                <button onclick="switchTab('ai')" data-nav="ai" class="nav-tab-desktop flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold text-amber-300 hover:bg-white/10 transition-all">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                    <span>✨ AI Туслах</span>
+                </button>
+                <button onclick="handlePostNavClick()" data-nav="post" class="nav-tab-desktop flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold text-sky-100 hover:bg-white/10 transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4 text-amber-400"></i>
+                    <span>+ Зар нэмэх</span>
+                </button>
+                <button onclick="switchTab('trips')" data-nav="trips" class="nav-tab-desktop relative flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold text-sky-100 hover:bg-white/10 transition-all">
+                    <i data-lucide="ticket" class="w-4 h-4"></i>
+                    <span>Аялал</span>
+                    <span class="trip-badge hidden bg-emerald-500 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+                </button>
+                <button onclick="switchTab('driver')" data-nav="driver" class="nav-tab-desktop flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold text-sky-100 hover:bg-white/10 transition-all">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                    <span>Үнэмлэх</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="max-w-3xl mx-auto px-4 pt-4 space-y-5">
+
+        <!-- ==================== VIEW 1: HOME & ROUTE FINDER ==================== -->
+        <section id="view-home" class="space-y-4">
+            
+            <!-- AI Banner -->
+            <div onclick="switchTab('ai')" class="cursor-pointer bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white rounded-2xl p-4 shadow-md border border-amber-400/30 flex items-center justify-between gap-3 hover:scale-[1.01] transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center shrink-0 text-amber-300">
+                        <i data-lucide="sparkles" class="w-6 h-6 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[10px]">GEMINI AI</span>
+                            <span class="text-xs sm:text-sm font-black">Ухаалаг чиглэл, замын зөвлөх</span>
+                        </div>
+                        <p class="text-[11px] text-sky-200 mt-0.5">Цаг агаар, замын нөхцөл, аль сумын унаа олохоос эхлээд бүгдийг асуугаарай!</p>
+                    </div>
+                </div>
+                <i data-lucide="chevron-right" class="w-5 h-5 text-amber-300 shrink-0"></i>
+            </div>
+
+            <!-- Interactive Route & Weather Finder Card -->
+            <div class="bg-white dark:bg-steppe-900 rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/90 dark:border-slate-800 space-y-4">
+                <datalist id="placesDatalist"></datalist>
+                <div class="grid grid-cols-1 sm:grid-cols-11 gap-2.5 items-end">
+                    <!-- Origin -->
+                    <div class="sm:col-span-5">
+                        <label for="filterOrigin" class="block text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+                            Хаанаас хөдлөх (Бичиж хайх)
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="filterOrigin" list="placesDatalist" oninput="onRouteChange()" placeholder="Бүгд (Жишээ: Мөст сум...)" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-amber-400 rounded-2xl py-3.5 pl-4 pr-10 text-base font-extrabold text-slate-900 dark:text-white outline-none transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-blue-600 dark:text-amber-400 absolute right-3.5 top-4 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Swap Button -->
+                    <div class="sm:col-span-1 flex justify-center">
+                        <button onclick="swapRouteLocations()" title="Чиглэл солих" class="p-3 rounded-2xl bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-amber-800 dark:text-amber-300 border border-amber-300/60 dark:border-amber-500/30 active:scale-95 transition-all">
+                            <i data-lucide="arrow-left-right" class="w-5 h-5 rotate-90 sm:rotate-0"></i>
+                        </button>
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="sm:col-span-5">
+                        <label for="filterDest" class="block text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">
+                            Хаашаа очих (Бичиж хайх)
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="filterDest" list="placesDatalist" oninput="onRouteChange()" placeholder="Бүгд (Жишээ: Ховд, Булган...)" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-amber-400 rounded-2xl py-3.5 pl-4 pr-10 text-base font-extrabold text-slate-900 dark:text-white outline-none transition-colors">
+                            <i data-lucide="navigation" class="w-5 h-5 text-emerald-600 dark:text-emerald-400 absolute right-3.5 top-4 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Route Intel & Weather Banner -->
+                <div id="routeIntelBanner" class="bg-gradient-to-br from-sky-50 to-blue-50 dark:from-steppe-800 dark:to-slate-800/80 rounded-2xl p-3.5 border border-sky-200/80 dark:border-slate-700 space-y-2.5">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-lg bg-blue-900 text-white dark:bg-amber-500 dark:text-slate-950 text-xs font-black" id="intelRouteTag">
+                                Орон нутгийн нэгдсэн сүлжээ
+                            </span>
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300" id="intelDistance">
+                                21 аймаг • 330 сум
+                            </span>
+                        </div>
+                        <span class="text-xs font-extrabold text-blue-800 dark:text-amber-300" id="intelAvgPrice">
+                            Дундаж тариф: 45,000₮ - 85,000₮
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 bg-white/80 dark:bg-steppe-900/70 px-3 py-2 rounded-xl border border-sky-100 dark:border-slate-700/80">
+                        <span id="intelWeatherText">☀️ Засмал болон хөдөөгийн зам цаг агаар тогтуун, хөдөлгөөн хэвийн байна.</span>
+                    </div>
+                </div>
+
+                <!-- Quick Filter Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
+                    <button onclick="setQuickFilter('ALL')" data-qfilter="ALL" class="qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-blue-900 text-white dark:bg-amber-500 dark:text-slate-950 shadow-xs transition-all">
+                        Бүгд
+                    </button>
+                    <button onclick="setQuickFilter('SEATS')" data-qfilter="SEATS" class="qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 flex items-center gap-1.5 transition-all">
+                        <i data-lucide="users" class="w-4 h-4 text-blue-600 dark:text-amber-400"></i>
+                        <span>Суудалтай</span>
+                    </button>
+                    <button onclick="setQuickFilter('CARGO')" data-qfilter="CARGO" class="qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 flex items-center gap-1.5 transition-all">
+                        <i data-lucide="package" class="w-4 h-4 text-amber-600"></i>
+                        <span>Дайвар авна</span>
+                    </button>
+                    <button onclick="setQuickFilter('VERIFIED')" data-qfilter="VERIFIED" class="qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 flex items-center gap-1.5 transition-all">
+                        <i data-lucide="badge-check" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Үнэмлэхтэй ✅</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feed Header -->
+            <div class="flex items-center justify-between px-1">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">Баталгаат чиглэлүүд</h2>
+                    <span id="feedCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-blue-100 text-blue-900 dark:bg-amber-500/20 dark:text-amber-300">0</span>
+                </div>
+                <button onclick="resetAllFilters()" id="clearFiltersBtn" class="hidden text-xs font-extrabold text-blue-700 dark:text-amber-400 hover:underline">
+                    Шүүлтүүр цэвэрлэх
+                </button>
+            </div>
+
+            <!-- Rides List Container -->
+            <div id="ridesFeedContainer" class="space-y-4"></div>
+        </section>
+
+        <!-- ==================== VIEW 1.5: AI ASSISTANT CHATBOT (NEW) ==================== -->
+        <section id="view-ai" class="hidden space-y-4">
+            <div class="bg-white dark:bg-steppe-900 rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col h-[75vh]">
+                <!-- Chat Header -->
+                <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-black shadow-md">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">Gemini AI Замын Туслах</h2>
+                            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Идэвхтэй • Орон нутгийн зам, цаг агаар
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="clearAiChat()" title="Чат цэвэрлэх" class="p-2 rounded-xl bg-slate-100 dark:bg-steppe-800 text-slate-500 text-xs font-bold hover:bg-slate-200">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Chat Messages Scroll Area -->
+                <div id="aiChatMessages" class="flex-1 overflow-y-auto py-4 space-y-3.5 pr-1">
+                    <div class="flex items-start gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">AI</div>
+                        <div class="bg-slate-100 dark:bg-steppe-800 rounded-2xl rounded-tl-xs p-3.5 text-xs sm:text-sm text-slate-800 dark:text-slate-100 max-w-[85%] leading-relaxed space-y-2">
+                            <p>Сайн байна уу? Би <b>Сумын унаа PRO</b> апп-ын ухаалаг AI туслах байна. Танд дараах зүйлсэд тусалж чадна:</p>
+                            <ul class="list-disc pl-4 space-y-1 text-slate-600 dark:text-slate-300">
+                                <li>Аль аймгийн сум руу ямар унаа явж байгааг хайж олох</li>
+                               <li>Замын нөхцөл, цаг агаарын мэдээлэл шалгах</li>
+                               <li>Жолоочийн үнэлгээ, баталгаажсан эсэхийг лавлах</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Prompt Chips -->
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2">
+                    <button onclick="sendQuickPrompt('Мөстөөс явах унаа байна уу?')" class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-steppe-800 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-xs font-extrabold text-slate-700 dark:text-slate-300 transition-all">
+                        🏔️ Мөстөөс явах унаа?
+                    </button>
+                    <button onclick="sendQuickPrompt('Өнөөдөр цаг агаар ямар байна?')" class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-steppe-800 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-xs font-extrabold text-slate-700 dark:text-slate-300 transition-all">
+                        ⛅ Замын цаг агаар
+                    </button>
+                    <button onclick="sendQuickPrompt('Хуурамч зарнаас яаж сэргийлэх вэ?')" class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-steppe-800 hover:bg-amber-100 dark:hover:bg-amber-500/20 text-xs font-extrabold text-slate-700 dark:text-slate-300 transition-all">
+                        🛡️ Аюулгүй байдлын зөвлөгөө
+                    </button>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="aiChatForm" onsubmit="handleAiChatSubmit(event)" class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                    <input type="text" id="aiChatInput" placeholder="AI-аас юм асуух (Жишээ: Мөрөн рүү явах унаа...)" required class="flex-1 bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-amber-500 rounded-2xl px-4 py-3 text-sm font-bold outline-none">
+                    <button type="submit" class="p-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black shadow-md transition-all active:scale-95">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: ID & DRIVER REGISTRATION ==================== -->
+        <section id="view-driver" class="hidden space-y-4">
+            
+            <div id="verifiedDriverCardView" class="hidden space-y-4">
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-950 via-slate-900 to-emerald-950 text-white p-5 sm:p-6 shadow-xl border border-emerald-500/30">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-emerald-500/10 blur-2xl"></div>
+                    <div class="absolute -left-10 -bottom-10 w-40 h-40 rounded-full bg-amber-500/10 blur-2xl"></div>
+
+                    <div class="flex items-start justify-between gap-3 relative z-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-2xl font-black text-slate-950 shadow-md overflow-hidden">
+                                <span id="drvCardInitial">Б</span>
+                            </div>
+                            <div>
+                                <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-extrabold mb-1">
+                                    <i data-lucide="badge-check" class="w-3.5 h-3.5"></i>
+                                    <span>Үнэмлэхтэй Жолооч ✅</span>
+                                </div>
+                                <h2 id="drvCardName" class="text-xl font-black tracking-tight">Батбаяр Дорж</h2>
+                                <p id="drvCardId" class="text-xs font-mono text-sky-300">Регистр: УШ92011215</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-amber-400 font-black text-lg flex items-center justify-end gap-1">
+                                <span id="drvCardRatingDisplay">4.9</span>
+                                <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            </div>
+                            <span id="drvCardReviewCount" class="text-[11px] text-emerald-300 font-bold">48 үнэлгээтэй</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mt-5 pt-4 border-t border-white/10 relative z-10 text-sm">
+                        <div class="bg-white/5 rounded-2xl p-3 border border-white/10">
+                            <span class="text-[11px] text-slate-400 block">Тээврийн хэрэгсэл</span>
+                            <span id="drvCardVehicle" class="font-extrabold text-white block mt-0.5">Toyota Land Cruiser 200</span>
+                            <span id="drvCardPlate" class="inline-block mt-1.5 px-2.5 py-0.5 rounded-md bg-white text-slate-950 font-black text-xs plate-badge border border-slate-400">
+                                12-34 УБА
+                            </span>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-3 border border-white/10 space-y-1.5">
+                            <div>
+                                <span class="text-[11px] text-slate-400 block">Утасны дугаар</span>
+                                <span id="drvCardPhone" class="font-extrabold text-emerald-300">9911-2233</span>
+                            </div>
+                            <div>
+                                <span class="text-[11px] text-slate-400 block">Гэр бүлийн SOS дугаар</span>
+                                <span id="drvCardEmergency" class="font-bold text-amber-300">8811-4455</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex flex-wrap gap-2 relative z-10">
+                        <button onclick="switchTab('post')" class="flex-1 py-3.5 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            <span>Шинэ зар оруулах</span>
+                        </button>
+                        <button onclick="editDriverProfile()" class="py-3.5 px-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm flex items-center justify-center gap-1.5 border border-white/15">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            <span>Засах</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ID & Driver Registration Form -->
+            <div id="driverRegistrationBox" class="bg-white dark:bg-steppe-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                <div class="flex items-start gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                        <i data-lucide="id-card" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Хуурамч зар & Залилангаас сэргийлэх</span>
+                        <h2 class="text-xl font-black text-slate-900 dark:text-white">Иргэний үнэмлэх & Жолооч баталгаажуулалт</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                            Зар оруулахын тулд иргэний үнэмлэхээ оруулан регистрийн дугаараа баталгаажуулна уу.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ID Card Photo OCR Simulation Box -->
+                <div class="p-4 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 dark:from-steppe-800 dark:to-slate-800/80 border-2 border-dashed border-blue-300 dark:border-slate-600 text-center space-y-3">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-steppe-700 text-blue-700 dark:text-amber-400 flex items-center justify-center mx-auto">
+                        <i data-lucide="camera" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-900 dark:text-white">Иргэний үнэмлэхний зураг оруулах (OCR автомат таних)</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Үнэмлэхний зургаа хавсаргахад мэдээлэл автоматаар танигдана.</p>
+                    </div>
+                    <label class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-900 text-white dark:bg-amber-500 dark:text-slate-950 text-xs font-extrabold cursor-pointer shadow-sm hover:opacity-95 transition-all">
+                        <i data-lucide="upload" class="w-4 h-4"></i>
+                        <span>Үнэмлэхний зураг сонгох</span>
+                        <input type="file" accept="image/*" onchange="simulateIdCardUpload(event)" class="hidden">
+                    </label>
+                    <div id="idScanStatus" class="hidden text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                        ✅ Иргэний үнэмлэх амжилттай уншигдаж, регистр баталгаажлаа!
+                    </div>
+                </div>
+
+                <form id="driverRegForm" onsubmit="saveDriverRegistration(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Овог, Нэр (Үнэмлэхээр) *</label>
+                            <input type="text" id="regFullName" required placeholder="Жишээ: Доржийн Батбаяр" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-bold outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Регистрийн дугаар (10 орон) *</label>
+                            <input type="text" id="regNumber" required maxlength="10" placeholder="УШ92011215" class="w-full uppercase bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-black plate-badge outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Утасны дугаар (8 орон) *</label>
+                            <input type="tel" id="regPhone" required pattern="[0-9]{8}" maxlength="8" placeholder="99112233" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-black outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Машины марк, загвар *</label>
+                            <input type="text" id="regVehicle" required placeholder="Жишээ: Toyota Land Cruiser 200" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-bold outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Улсын дугаар *</label>
+                            <input type="text" id="regPlate" required placeholder="Жишээ: 12-34 УБА" maxlength="10" class="w-full uppercase bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-black plate-badge outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Гэр бүлийн яаралтай холбогдох дугаар *</label>
+                            <input type="tel" id="regEmergencyPhone" required pattern="[0-9]{8}" maxlength="8" placeholder="Хань / Аав ээжийн дугаар" class="w-full bg-amber-50/70 dark:bg-amber-950/20 border-2 border-amber-300 dark:border-amber-600/50 rounded-2xl p-3.5 text-base font-black outline-none">
+                        </div>
+                    </div>
+
+                    <label class="flex items-start gap-3 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border-2 border-emerald-200 dark:border-emerald-800 cursor-pointer">
+                        <input type="checkbox" id="regPledge" required class="w-6 h-6 mt-0.5 rounded accent-emerald-600 shrink-0">
+                        <div class="text-xs sm:text-sm text-emerald-950 dark:text-emerald-200">
+                            <span class="font-black block">Үнэмлэхээр баталгаажуулах тангараг</span>
+                            Миний бие үнэн зөв мэдээллээр бүртгүүлж, зорчигч болон ачааг аюулгүй хүргэхээ баталж байна.
+                        </div>
+                    </label>
+
+                    <button type="submit" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 dark:from-amber-500 dark:to-amber-600 dark:text-slate-950 text-white font-black text-base sm:text-lg shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99]">
+                        <i data-lucide="badge-check" class="w-6 h-6"></i>
+                        <span>Үнэмлэх шалгуулж эрх нээх</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 3: POST NEW RIDE ==================== -->
+        <section id="view-post" class="hidden space-y-4">
+            <div class="bg-white dark:bg-steppe-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                <div class="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl p-3.5 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <i data-lucide="badge-check" class="w-6 h-6 text-emerald-600 shrink-0"></i>
+                        <div>
+                            <div class="text-xs font-bold text-emerald-800 dark:text-emerald-300">Баталгаажсан эрхээр зар оруулж байна</div>
+                            <div id="postLockedDriverInfo" class="text-sm font-black text-slate-900 dark:text-white">Батбаяр • УШ92011215 • 12-34 УБА</div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="switchTab('driver')" class="text-xs font-extrabold text-blue-700 dark:text-amber-400 underline">
+                        Профайл
+                    </button>
+                </div>
+
+                <form id="newRideForm" onsubmit="submitNewRide(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Хаанаас хөдлөх (Чиглэлээ бичнэ үү) *</label>
+                            <input type="text" id="postOrigin" list="placesDatalist" required placeholder="Жишээ: Ховд - Мөст сум" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-amber-400 rounded-2xl p-3.5 text-base font-extrabold outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Хаашаа очих (Чиглэлээ бичнэ үү) *</label>
+                            <input type="text" id="postDest" list="placesDatalist" required placeholder="Жишээ: Ховд - Жаргалант" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-blue-600 dark:focus:border-amber-400 rounded-2xl p-3.5 text-base font-extrabold outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                            📍 Аюулгүй уулзах цэг (Камертай, хүн ихтэй газар) *
+                        </label>
+                        <select id="postPickupPoint" required class="w-full bg-amber-50/60 dark:bg-steppe-800 border-2 border-amber-300 dark:border-amber-500/40 rounded-2xl p-3.5 text-sm sm:text-base font-extrabold outline-none">
+                            <option value="Драгон төвийн төв зогсоол (Камертай)">📍 Драгон төвийн төв зогсоол (Камертай)</option>
+                            <option value="Сумын ЗДТГ-ын өмнөх төв талбай">📍 Сумын ЗДТГ-ын өмнөх төв талбай</option>
+                            <option value="Аймгийн төв талбай / Авто вокзал">📍 Аймгийн төв талбай / Авто вокзал</option>
+                            <option value="Төв ШТС-ын дэргэдэх гэрэлтүүлэгтэй зогсоол">📍 Төв ШТС-ын дэргэдэх гэрэлтүүлэгтэй зогсоол</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Хэзээ хөдлөх *</label>
+                            <select id="postDay" required class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-extrabold outline-none">
+                                <option value="Өнөөдөр">Өнөөдөр</option>
+                                <option value="Маргааш">Маргааш</option>
+                                <option value="Нөгөөдөр">Нөгөөдөр</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Хөдлөх цаг *</label>
+                            <input type="time" id="postTime" value="18:00" required class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-extrabold outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3.5">
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Хоосон суудал *</label>
+                            <select id="postSeats" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-extrabold outline-none">
+                                <option value="4">4 суудал (Бүтэн)</option>
+                                <option value="3" selected>3 суудал</option>
+                                <option value="2">2 суудал</option>
+                                <option value="1">1 суудал</option>
+                                <option value="0">0 (Зөвхөн дайвар ачаа)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">1 хүний үнэ (₮) *</label>
+                            <input type="number" id="postSeatPrice" value="65000" min="5000" step="5000" required class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-base font-black outline-none">
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-steppe-800/80 border border-slate-200 dark:border-slate-700 space-y-3">
+                        <label class="flex items-center justify-between cursor-pointer">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="package" class="w-5 h-5 text-amber-600"></i>
+                                <span class="font-extrabold text-sm sm:text-base">Дайвар ачаа / илгээмж авна</span>
+                            </div>
+                            <input type="checkbox" id="postTakesCargo" checked onchange="document.getElementById('postCargoPriceWrap').classList.toggle('hidden', !this.checked)" class="w-6 h-6 accent-amber-500 rounded">
+                        </label>
+                        <div id="postCargoPriceWrap">
+                            <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Дайвар ачааны доод үнэ (₮)</label>
+                            <input type="number" id="postCargoPrice" value="15000" step="5000" class="w-full bg-white dark:bg-steppe-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-sm font-extrabold outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-700 dark:text-slate-300 mb-1">Нэмэлт тайлбар</label>
+                        <textarea id="postNotes" rows="2" placeholder="Засмал замаар явна..." class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 text-sm font-medium outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99]">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Баталгаат зарыг нийтлэх</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 4: MY TRIPS & RATING CENTER ==================== -->
+        <section id="view-trips" class="hidden space-y-5">
+            
+            <div class="bg-gradient-to-br from-rose-950 via-red-900 to-slate-900 text-white rounded-3xl p-4 sm:p-5 shadow-md border border-rose-500/30 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-300">
+                            <i data-lucide="siren" class="w-5 h-5"></i>
+                        </span>
+                        <div>
+                            <h3 class="font-black text-sm sm:text-base">Яаралтай тусламж (SOS Төв)</h3>
+                            <p class="text-[11px] text-rose-200">Шуурхай дуудлага & Сүлжээгүй үеийн тусламж</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <a href="tel:102" class="py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-center transition-all">
+                        <div class="text-lg font-black text-white">102</div>
+                        <div class="text-[11px] font-bold text-rose-200">Цагдаа</div>
+                    </a>
+                    <a href="tel:105" class="py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-center transition-all">
+                        <div class="text-lg font-black text-amber-300">105</div>
+                        <div class="text-[11px] font-bold text-rose-200">Онцгой байдал</div>
+                    </a>
+                    <a href="tel:103" class="py-2.5 px-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-center transition-all">
+                        <div class="text-lg font-black text-emerald-300">103</div>
+                        <div class="text-[11px] font-bold text-rose-200">Түргэн тусламж</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h2 class="text-lg font-black text-slate-900 dark:text-white px-1">Миний цахим тасалбар & Жолоочид үнэлгээ өгөх</h2>
+                <div id="myTripsContainer" class="space-y-4"></div>
+            </div>
+        </section>
+
+
+        <!-- ==================== VIEW 5: ADMIN MODERATION PANEL ==================== -->
+        <section id="view-admin" class="hidden space-y-4">
+            <div class="bg-gradient-to-r from-rose-950 via-slate-900 to-blue-950 text-white rounded-3xl p-5 shadow-lg border border-rose-500/40 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-300">
+                        <i data-lucide="shield-check" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase">Админ Хяналтын Самбар</span>
+                        <h2 class="text-lg sm:text-xl font-black mt-0.5">Сэжигтэй зар хянах & Устгах</h2>
+                        <p class="text-xs text-slate-300">Та өдөр бүр ороод залилан болон сэжигтэй заруудыг бүрмөсөн устгах эрхтэй.</p>
+                    </div>
+                </div>
+                <button onclick="logoutAdmin()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-extrabold text-rose-200 border border-white/15">
+                    Гарах
+                </button>
+            </div>
+
+            <!-- Admin Stats -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white dark:bg-steppe-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800">
+                    <div class="text-xs font-bold text-slate-500">Нийт идэвхтэй зар</div>
+                    <div id="adminTotalRidesCount" class="text-2xl font-black text-blue-950 dark:text-amber-400 mt-1">0</div>
+                </div>
+                <div class="bg-white dark:bg-steppe-900 rounded-2xl p-4 border border-rose-200 dark:border-rose-900/50">
+                    <div class="text-xs font-bold text-rose-600 dark:text-rose-400">Сэжигтэй гэж мэдээлэгдсэн</div>
+                    <div id="adminFlaggedRidesCount" class="text-2xl font-black text-rose-600 mt-1">0</div>
+                </div>
+            </div>
+
+            <!-- Admin Rides Moderation List -->
+            <div class="space-y-3">
+                <h3 class="text-base font-black px-1">Бүх заруудын жагсаалт (Устгах / Сэргээх)</h3>
+                <div id="adminRidesContainer" class="space-y-3"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MOBILE FIXED BOTTOM NAVIGATION ==================== -->
+    <nav class="sm:hidden fixed bottom-0 inset-x-0 z-30 glass-header bg-white/95 dark:bg-steppe-900/95 border-t border-slate-200 dark:border-slate-800 px-1 py-2 shadow-2xl">
+        <div class="grid grid-cols-5 gap-1">
+            <button onclick="switchTab('home')" data-mnav="home" class="mnav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-blue-900 dark:text-amber-400 font-extrabold">
+                <i data-lucide="compass" class="w-5 h-5 mb-0.5"></i>
+                <span class="text-[10px]">Хайх</span>
+            </button>
+            <button onclick="switchTab('ai')" data-mnav="ai" class="mnav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-500 dark:text-slate-400 font-bold">
+                <i data-lucide="sparkles" class="w-5 h-5 mb-0.5 text-amber-500"></i>
+                <span class="text-[10px]">AI Туслах</span>
+            </button>
+            <button onclick="handlePostNavClick()" data-mnav="post" class="mnav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-500 dark:text-slate-400 font-bold">
+                <i data-lucide="plus-circle" class="w-5 h-5 mb-0.5"></i>
+                <span class="text-[10px]">Зар</span>
+            </button>
+            <button onclick="switchTab('trips')" data-mnav="trips" class="mnav-btn relative flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-500 dark:text-slate-400 font-bold">
+                <i data-lucide="ticket" class="w-5 h-5 mb-0.5"></i>
+                <span class="text-[10px]">Аялал</span>
+                <span class="trip-badge hidden absolute top-1 right-2 bg-emerald-500 text-white text-[9px] font-black px-1.5 rounded-full">0</span>
+            </button>
+            <button onclick="switchTab('driver')" data-mnav="driver" class="mnav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-500 dark:text-slate-400 font-bold">
+                <i data-lucide="id-card" class="w-5 h-5 mb-0.5"></i>
+                <span class="text-[10px]">Үнэмлэх</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== BOOKING MODAL ==================== -->
+    <div id="bookingModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[92vh] overflow-y-auto animate-modal space-y-4">
+            
+            <div class="flex items-start justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px] font-black">Баталгаат захиалга</span>
+                        <span id="modalPlatePill" class="px-2 py-0.5 rounded-md bg-slate-900 text-white dark:bg-white dark:text-slate-950 text-[11px] font-black plate-badge">12-34 УБА</span>
+                    </div>
+                    <h3 id="modalTitle" class="text-lg font-black text-slate-900 dark:text-white mt-1">Улаанбаатар ➔ Архангай</h3>
+                    <p id="modalSub" class="text-xs font-bold text-slate-500 dark:text-slate-400">Батбаяр • Өнөөдөр, 18:00</p>
+                </div>
+                <button onclick="closeBookingModal()" class="p-2 rounded-full bg-slate-100 dark:bg-steppe-800 text-slate-600 dark:text-slate-300">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-steppe-800 p-1.5 rounded-2xl">
+                <button type="button" id="modeSeatBtn" onclick="switchBookingMode('seat')" class="py-2.5 px-3 rounded-xl font-extrabold text-sm bg-white dark:bg-steppe-900 text-blue-900 dark:text-amber-400 shadow-xs flex items-center justify-center gap-1.5 transition-all">
+                    <i data-lucide="armchair" class="w-4 h-4"></i>
+                    <span>Суудал сонгох</span>
+                </button>
+                <button type="button" id="modeCargoBtn" onclick="switchBookingMode('cargo')" class="py-2.5 px-3 rounded-xl font-extrabold text-sm text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-all">
+                    <i data-lucide="package" class="w-4 h-4"></i>
+                    <span>📦 Дайвар ачаа</span>
+                </button>
+            </div>
+
+            <form id="bookingForm" onsubmit="submitSafeBooking(event)" class="space-y-4">
+                <input type="hidden" id="modalTripId">
+                <input type="hidden" id="bookingModeInput" value="seat">
+
+                <div id="cabinSelectorSection" class="space-y-2.5">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400">
+                        <span>Машины бүхээгнээс суудлаа дарж сонгоно уу:</span>
+                        <span class="text-amber-600 dark:text-amber-400 font-extrabold">Урд суудал 1.2x</span>
+                    </div>
+
+                    <div class="bg-slate-100 dark:bg-steppe-800/90 rounded-3xl p-4 border-2 border-slate-200 dark:border-slate-700 max-w-xs mx-auto space-y-3">
+                        <div class="text-center text-[10px] font-black uppercase tracking-widest text-slate-400">▲ Урд тал (Хөдөлгүүр)</div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 rounded-2xl bg-slate-200/80 dark:bg-steppe-900/70 border border-slate-300 dark:border-slate-700 text-center opacity-75">
+                                <i data-lucide="life-buoy" class="w-5 h-5 mx-auto text-slate-500 mb-1"></i>
+                                <div class="text-xs font-black text-slate-600 dark:text-slate-400">Жолооч</div>
+                                <div class="text-[10px] text-slate-400">Үнэмлэхтэй</div>
+                            </div>
+                            <button type="button" data-seat="front" onclick="toggleSeatSelect('front')" class="seat-btn p-3 rounded-2xl border-2 text-center">
+                                <i data-lucide="armchair" class="w-5 h-5 mx-auto mb-1"></i>
+                                <div class="text-xs font-black">Урд суудал</div>
+                                <div id="priceFrontLabel" class="text-[11px] font-bold">78,000₮</div>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 pt-2 border-t border-dashed border-slate-300 dark:border-slate-700">
+                            <button type="button" data-seat="back_left" onclick="toggleSeatSelect('back_left')" class="seat-btn p-2.5 rounded-2xl border-2 text-center">
+                                <i data-lucide="user" class="w-4 h-4 mx-auto mb-1"></i>
+                                <div class="text-[11px] font-black">Хойд зүүн</div>
+                                <div class="back-seat-price text-[10px] font-bold">65,000₮</div>
+                            </button>
+                            <button type="button" data-seat="back_mid" onclick="toggleSeatSelect('back_mid')" class="seat-btn p-2.5 rounded-2xl border-2 text-center">
+                                <i data-lucide="user" class="w-4 h-4 mx-auto mb-1"></i>
+                                <div class="text-[11px] font-black">Хойд дунд</div>
+                                <div class="back-seat-price text-[10px] font-bold">65,000₮</div>
+                            </button>
+                            <button type="button" data-seat="back_right" onclick="toggleSeatSelect('back_right')" class="seat-btn p-2.5 rounded-2xl border-2 text-center">
+                                <i data-lucide="user" class="w-4 h-4 mx-auto mb-1"></i>
+                                <div class="text-[11px] font-black">Хойд баруун</div>
+                                <div class="back-seat-price text-[10px] font-bold">65,000₮</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="selectedSeatsSummary" class="text-center text-xs font-extrabold text-blue-800 dark:text-amber-300">
+                        Сонгосон суудал: Байхгүй
+                    </div>
+                </div>
+
+                <div id="cargoSelectorSection" class="hidden space-y-3">
+                    <label class="block text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase">Дайврын төрөл сонгох:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" onclick="selectCargoPreset('Ааруул / Цагаан идээ')" class="cargo-preset p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-left text-xs font-extrabold hover:border-amber-500">🥛 Цагаан идээ</button>
+                        <button type="button" onclick="selectCargoPreset('Авто сэлбэг хэрэгсэл')" class="cargo-preset p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-left text-xs font-extrabold hover:border-amber-500">🔧 Авто сэлбэг</button>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">Ачааны дэлгэрэнгүй, жин *</label>
+                        <input type="text" id="cargoNoteInput" placeholder="Жишээ: 1 шуудай ааруул (15кг)" class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm font-bold outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">📍 Аюулгүй уулзах цэг *</label>
+                    <select id="bookingPickupSelect" required class="w-full bg-amber-50/70 dark:bg-steppe-800 border-2 border-amber-300 dark:border-amber-500/40 rounded-xl p-3 text-sm font-extrabold outline-none">
+                        <option value="Драгон төвийн төв зогсоол (Камертай)">📍 Драгон төвийн төв зогсоол (Камертай)</option>
+                        <option value="Сумын ЗДТГ-ын өмнөх төв талбай">📍 Сумын ЗДТГ-ын өмнөх төв талбай</option>
+                    </select>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">Таны нэр *</label>
+                            <input type="text" id="bookerNameInput" required placeholder="Нэрээ оруулна уу" class="w-full bg-white dark:bg-steppe-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-sm font-bold outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">Таны утас *</label>
+                            <input type="tel" id="bookerPhoneInput" required pattern="[0-9]{8}" maxlength="8" placeholder="99001122" class="w-full bg-white dark:bg-steppe-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-sm font-black outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-blue-900 dark:text-amber-300 mb-1 flex items-center gap-1">
+                            <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                            <span>Гэр бүлийн хүний яаралтай утас *</span>
+                        </label>
+                        <input type="tel" id="familyEmergencyInput" required pattern="[0-9]{8}" maxlength="8" placeholder="Эхнэр / Нөхөр / Аав ээжийн дугаар" class="w-full bg-white dark:bg-steppe-900 border-2 border-blue-300 dark:border-amber-500/50 rounded-xl p-2.5 text-sm font-black outline-none">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-4 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.99]">
+                    <i data-lucide="ticket" class="w-5 h-5"></i>
+                    <span>Цахим тасалбар баталгаажуулах</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== DRIVER RATING MODAL ==================== -->
+    <div id="ratingModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 animate-modal">
+            <div class="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center mx-auto">
+                <i data-lucide="star" class="w-8 h-8 fill-amber-400"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-black">Жолоочид үнэлгээ өгөх</h3>
+                <p id="ratingDriverMeta" class="text-xs font-bold text-slate-500 mt-1">Жолооч: Доржийн Батбаяр</p>
+                <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-0.5">Очих газартаа амжилттай хүрсэнд баяр хүргэе!</p>
+            </div>
+
+            <input type="hidden" id="ratingTicketIdInput">
+            <input type="hidden" id="ratingDriverNameInput">
+
+            <!-- Interactive 5 Stars Picker -->
+            <div class="flex items-center justify-center gap-2 py-2" id="starPickerContainer">
+                <button type="button" onclick="setRatingStars(1)" class="star-btn p-2 text-slate-300 hover:text-amber-400 transition-colors"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+                <button type="button" onclick="setRatingStars(2)" class="star-btn p-2 text-slate-300 hover:text-amber-400 transition-colors"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+                <button type="button" onclick="setRatingStars(3)" class="star-btn p-2 text-slate-300 hover:text-amber-400 transition-colors"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+                <button type="button" onclick="setRatingStars(4)" class="star-btn p-2 text-slate-300 hover:text-amber-400 transition-colors"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+                <button type="button" onclick="setRatingStars(5)" class="star-btn p-2 text-amber-400 transition-colors"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+            </div>
+            <input type="hidden" id="selectedStarValue" value="5">
+
+            <textarea id="ratingCommentInput" rows="2" placeholder="Жолоочийн соёл, машины цэвэр цэмцгэр байдлын талаар сэтгэгдлээ үлдээнэ үү..." class="w-full bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl p-3 text-xs font-medium outline-none"></textarea>
+
+            <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="document.getElementById('ratingModal').classList.add('hidden')" class="py-3 bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-300 font-extrabold rounded-xl text-sm">
+                    Болих
+                </button>
+                <button onclick="submitDriverRating()" class="py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-sm shadow-md">
+                    Үнэлгээ илгээх
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FAMILY SAFETY SMS MODAL ==================== -->
+    <div id="familySmsModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-md rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 animate-modal">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <i data-lucide="shield-check" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white">Гэр бүлдээ мэдэгдэх</h3>
+                    <p id="smsTargetNumberText" class="text-xs font-bold text-emerald-600">Илгээх дугаар: 8811-2233</p>
+                </div>
+            </div>
+            <div class="bg-slate-100 dark:bg-steppe-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-800 dark:text-slate-200 leading-relaxed" id="smsPreviewBody"></div>
+            <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="copySafetySmsText()" class="py-3.5 px-4 rounded-xl bg-slate-200 dark:bg-steppe-800 text-slate-900 dark:text-white font-extrabold text-sm flex items-center justify-center gap-1.5">
+                    <i data-lucide="copy" class="w-4 h-4"></i><span>Текст хуулах</span>
+                </button>
+                <a id="directSmsAnchor" href="sms:" class="py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm flex items-center justify-center gap-1.5 shadow-sm">
+                    <i data-lucide="send" class="w-4 h-4"></i><span>SMS илгээх</span>
+                </a>
+            </div>
+            <button onclick="document.getElementById('familySmsModal').classList.add('hidden')" class="w-full py-2 text-xs font-extrabold text-slate-500">Хаах</button>
+        </div>
+    </div>
+
+    <!-- ==================== SCAM MODAL ==================== -->
+    <div id="scamReportModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-rose-200 dark:border-rose-900/50 space-y-4 animate-modal">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white">Сэжигтэй зар мэдээлэх</h3>
+                    <p id="scamTargetLabel" class="text-xs font-bold text-slate-500">Жолооч: Батбаяр</p>
+                </div>
+            </div>
+            <input type="hidden" id="scamTripIdInput">
+            <div class="space-y-2">
+                <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer text-sm font-bold">
+                    <input type="radio" name="scamReason" value="Урьдчилгаа мөнгө нэхсэн (Залилан)" checked class="accent-rose-600">
+                    <span>Урьдчилгаа мөнгө шилжүүлэхийг шаардсан</span>
+                </label>
+                <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer text-sm font-bold">
+                    <input type="radio" name="scamReason" value="Хуурамч үнэмлэх / Улсын дугаар" class="accent-rose-600">
+                    <span>Хуурамч үнэмлэх эсвэл улсын дугаар</span>
+                </label>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <button onclick="document.getElementById('scamReportModal').classList.add('hidden')" class="py-3 rounded-xl bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-300 font-extrabold text-sm">Болих</button>
+                <button onclick="confirmScamReport()" class="py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-sm shadow-sm">Мэдээлэх & Нуух</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CALL MODAL ==================== -->
+    <div id="callModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 animate-modal">
+            <div class="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                <i data-lucide="phone-call" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h3 id="callModalName" class="text-xl font-black">Батбаяр</h3>
+                <p id="callModalMeta" class="text-xs font-bold text-slate-500 mt-0.5">Toyota Land Cruiser 200 • 12-34 УБА</p>
+                <p id="callModalReg" class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 mt-1">Регистр: УШ92011215 (Үнэмлэх баталгаажсан ✅)</p>
+            </div>
+            <div class="bg-slate-100 dark:bg-steppe-800 py-3.5 px-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <div class="text-[11px] font-bold text-slate-400 uppercase">Баталгаажсан дугаар</div>
+                <div id="callModalPhone" class="text-3xl font-black tracking-wider text-blue-950 dark:text-amber-400 mt-0.5">9911-8420</div>
+            </div>
+            <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="copyCallPhone()" class="py-3.5 px-4 bg-slate-200 dark:bg-steppe-800 text-slate-900 dark:text-white font-extrabold rounded-xl flex items-center justify-center gap-1.5 text-sm">
+                    <i data-lucide="copy" class="w-4 h-4"></i><span>Хуулах</span>
+                </button>
+                <a id="callModalTelHref" href="tel:99118420" class="py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl flex items-center justify-center gap-1.5 text-sm shadow-sm">
+                    <i data-lucide="phone" class="w-4 h-4"></i><span>Залгах</span>
+                </a>
+            </div>
+            <button onclick="document.getElementById('callModal').classList.add('hidden')" class="w-full py-2 text-xs font-extrabold text-slate-500">Хаах</button>
+        </div>
+    </div>
+
+
+    <!-- ==================== ADMIN LOGIN MODAL ==================== -->
+    <div id="adminLoginModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-steppe-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-rose-300 dark:border-rose-800 space-y-4 animate-modal text-center">
+            <div class="w-14 h-14 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center mx-auto">
+                <i data-lucide="lock" class="w-7 h-7"></i>
+            </div>
+            <div>
+                <h3 class="text-xl font-black">Админ эрхээр нэвтрэх</h3>
+                <p class="text-xs text-slate-500 mt-1">Сэжигтэй зар устгах админ нууц кодоо оруулна уу.</p>
+            </div>
+            <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
+                <input type="password" id="adminPasswordInput" required placeholder="Нууц код (2102)" class="w-full text-center tracking-widest bg-slate-50 dark:bg-steppe-800 border-2 border-slate-200 dark:border-slate-700 focus:border-rose-500 rounded-2xl p-3.5 text-lg font-black outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <button type="button" onclick="document.getElementById('adminLoginModal').classList.add('hidden')" class="py-3 rounded-xl bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-300 font-extrabold text-sm">Болих</button>
+                    <button type="submit" class="py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-sm shadow-md">Нэвтрэх</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST ==================== -->
+    <div id="toast" class="fixed bottom-20 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 dark:bg-white text-white dark:text-slate-950 px-5 py-3.5 rounded-2xl shadow-2xl font-extrabold text-xs sm:text-sm flex items-center gap-2.5 max-w-[92vw]">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0"></i>
+        <span id="toastText">Амжилттай!</span>
+    </div>
+
+    <script>
+        const PLACES = [
+            "Улаанбаатар",
+            "Ховд - Жаргалант (Аймгийн төв)",
+            "Ховд - Алтай сум",
+            "Ховд - Булган сум",
+            "Ховд - Буянт сум",
+            "Ховд - Дарви сум",
+            "Ховд - Дөргөн сум",
+            "Ховд - Дуут сум",
+            "Ховд - Зэрэг сум",
+            "Ховд - Манхан сум",
+            "Ховд - Мөнххайрхан сум",
+            "Ховд - Мөст сум",
+            "Ховд - Мянгад сум",
+            "Ховд - Үенч сум",
+            "Ховд - Ховд сум",
+            "Ховд - Цэцэг сум",
+            "Ховд - Чандмань сум",
+            "Ховд - Эрдэнэбүрэн сум",
+            "Архангай - Цэцэрлэг",
+            "Архангай - Тариат сум",
+            "Өвөрхангай - Арвайхээр",
+            "Өвөрхангай - Хархорин",
+            "Хөвсгөл - Мөрөн",
+            "Хөвсгөл - Хатгал",
+            "Завхан - Улиастай"
+        ];
+
+        const ROUTE_INTEL = {
+            "Ховд - Мөст сум|Ховд - Жаргалант (Аймгийн төв)": { km: "195 км", time: "3.5 цаг", price: "35,000₮", weather: "🏔️ Мөст сумаас аймгийн төв орох зам хэвийн, даваа цэлмэг байна." },
+            "Ховд - Жаргалант (Аймгийн төв)|Ховд - Мөст сум": { km: "195 км", time: "3.5 цаг", price: "35,000₮", weather: "🏔️ Алтайн уулын даваагаар явна. Зам хэвийн, дулаан хувцаслахыг зөвлөж байна." },
+            "Ховд - Мөст сум|Ховд - Булган сум": { km: "240 км", time: "4.5 цаг", price: "45,000₮", weather: "☀️ Сайжруулсан шороон болон уулын зам хэвийн." },
+            "Ховд - Мөст сум|Ховд - Манхан сум": { km: "120 км", time: "2.5 цаг", price: "25,000₮", weather: "☀️ Говь болон талын зам хэвийн." },
+            "Ховд - Жаргалант (Аймгийн төв)|Ховд - Булган сум": { km: "385 км", time: "6 цаг", price: "55,000₮", weather: "☀️ Бодончийн хавцлаар засмал замтай, хөдөлгөөн хэвийн." },
+            "Ховд - Жаргалант (Аймгийн төв)|Ховд - Үенч сум": { km: "320 км", time: "5 цаг", price: "45,000₮", weather: "☀️ Засмал болон сайжруулсан зам хэвийн." },
+            "Ховд - Жаргалант (Аймгийн төв)|Ховд - Цэцэг сум": { km: "225 км", time: "4 цаг", price: "35,000₮", weather: "⛅ Уулын замаар хөдөлгөөн хэвийн." },
+            "Улаанбаатар|Ховд - Жаргалант (Аймгийн төв)": { km: "1,425 км", time: "18 цаг", price: "140,000₮", weather: "☀️ Баруун чиглэлийн хатуу хучилттай засмал зам хэвийн." },
+            "Ховд - Жаргалант (Аймгийн төв)|Улаанбаатар": { km: "1,425 км", time: "18 цаг", price: "140,000₮", weather: "☀️ Баруун чиглэлийн хатуу хучилттай засмал зам хэвийн." },
+            "Улаанбаатар|Архангай - Тариат сум": { km: "655 км", time: "8.5 цаг", price: "65,000₮", weather: "❄️ Цагаан даваа орчимд цастай, хальтиргаатай тул анхаарна уу." },
+            "Архангай - Тариат сум|Улаанбаатар": { km: "655 км", time: "8.5 цаг", price: "65,000₮", weather: "❄️ Цагаан даваа орчимд цастай, хальтиргаатай тул анхаарна уу." },
+            "Улаанбаатар|Хөвсгөл - Мөрөн": { km: "671 км", time: "9 цаг", price: "75,000₮", weather: "☀️ Засмал зам цэлмэг, дардан." }
+        };
+
+        const DEFAULT_RIDES = [
+            {
+                id: "ride-most-1",
+                origin: "Ховд - Мөст сум",
+                destination: "Ховд - Жаргалант (Аймгийн төв)",
+                day: "Өнөөдөр",
+                time: "08:00",
+                driverName: "Цэрэнгийн Батболд",
+                regNumber: "ХД78120415",
+                driverRating: 4.9,
+                reviewCount: 42,
+                verified: true,
+                vehicle: "UAZ Fourgon",
+                plate: "33-45 ХОВ",
+                pickupPoint: "📍 Сумын ЗДТГ-ын өмнөх төв талбай",
+                seatPrice: 35000,
+                takesCargo: true,
+                cargoPrice: 10000,
+                phone: "88221144",
+                takenSeats: [],
+                notes: "Мөст сумын төвөөс аймгийн төв (Жаргалант) руу өглөө эрт хөдөлнө. Суудал болон дайвар ачаа сайтар авна.",
+                flagged: false
+            },
+            {
+                id: "ride-most-2",
+                origin: "Ховд - Мөст сум",
+                destination: "Ховд - Булган сум",
+                day: "Маргааш",
+                time: "10:00",
+                driverName: "Нямдаваагийн Болд",
+                regNumber: "ХД92031122",
+                driverRating: 4.8,
+                reviewCount: 29,
+                verified: true,
+                vehicle: "Toyota Land Cruiser 80",
+                plate: "19-88 ХОА",
+                pickupPoint: "📍 Сумын ЗДТГ-ын өмнөх төв талбай",
+                seatPrice: 45000,
+                takesCargo: true,
+                cargoPrice: 15000,
+                phone: "99667788",
+                takenSeats: ["front"],
+                notes: "Мөстөөс Булган сум руу явах унаа байна.",
+                flagged: false
+            },
+            {
+                id: "ride-khovd-1",
+                origin: "Ховд - Жаргалант (Аймгийн төв)",
+                destination: "Ховд - Мөст сум",
+                day: "Өнөөдөр",
+                time: "14:00",
+                driverName: "Ганболдын Тэмүүлэн",
+                regNumber: "ХД89051412",
+                driverRating: 5.0,
+                reviewCount: 34,
+                verified: true,
+                vehicle: "Toyota Land Cruiser Prado 150",
+                plate: "45-67 ХОА",
+                pickupPoint: "📍 Аймгийн төв талбай / Авто вокзал",
+                seatPrice: 35000,
+                takesCargo: true,
+                cargoPrice: 10000,
+                phone: "99435511",
+                takenSeats: ["back_mid"],
+                notes: "Ховд аймгийн төвөөс Мөст сум руу шууд хөдөлнө. Дайвар ачаа авна.",
+                flagged: false
+            },
+            {
+                id: "ride-khovd-2",
+                origin: "Ховд - Жаргалант (Аймгийн төв)",
+                destination: "Ховд - Булган сум",
+                day: "Маргааш",
+                time: "09:00",
+                driverName: "Бат-Эрдэнийн Сүхбаатар",
+                regNumber: "ХД85112018",
+                driverRating: 4.9,
+                reviewCount: 61,
+                verified: true,
+                vehicle: "UAZ Patriot",
+                plate: "88-12 ХОВ",
+                pickupPoint: "📍 Төв ШТС-ын дэргэдэх гэрэлтүүлэгтэй зогсоол",
+                seatPrice: 55000,
+                takesCargo: true,
+                cargoPrice: 15000,
+                phone: "88431199",
+                takenSeats: [],
+                notes: "Манхан, Зэрэг, Үенч дайрч Булган сум орно.",
+                flagged: false
+            },
+            {
+                id: "ride-101",
+                origin: "Улаанбаатар",
+                destination: "Архангай - Тариат сум",
+                day: "Өнөөдөр",
+                time: "18:00",
+                driverName: "Доржийн Батбаяр",
+                regNumber: "УШ92011215",
+                driverRating: 4.9,
+                reviewCount: 48,
+                verified: true,
+                vehicle: "Toyota Land Cruiser 200",
+                plate: "12-34 УБА",
+                pickupPoint: "📍 Драгон төвийн төв зогсоол (Камертай)",
+                seatPrice: 65000,
+                takesCargo: true,
+                cargoPrice: 15000,
+                phone: "99118420",
+                takenSeats: ["back_mid"],
+                notes: "Драгоноос яг 18:00 цагт хөдөлнө.",
+                flagged: false
+            }
+        ];
+
+        let rides = [];
+        let bookings = [];
+        let driverProfile = null;
+        let currentQuickFilter = "ALL";
+        let selectedSeatsInModal = [];
+        let currentCallNumber = "";
+        let currentSmsBodyText = "";
+        let chatHistory = [];
+        let isAdminLoggedIn = false;
+        const ADMIN_PIN = "2102";
+
+        const STORAGE_KEYS = {
+            RIDES: "sumyn_unaa_safe_rides_ai_v8_admin",
+            BOOKINGS: "sumyn_unaa_safe_bookings_ai_v5",
+            DRIVER: "sumyn_unaa_safe_driver_ai_v5",
+            THEME: "sumyn_unaa_theme_ai_v5",
+            CHAT: "sumyn_unaa_chat_history_v5",
+            ADMIN: "sumyn_unaa_is_admin_v8"
+        };
+
+        function initApp() {
+            initTheme();
+            populateSelects();
+            loadAllState();
+            isAdminLoggedIn = localStorage.getItem(STORAGE_KEYS.ADMIN) === "true";
+            updateAdminHeaderState();
+            updateDriverUIState();
+            onRouteChange();
+            renderMyTrips();
+            loadChatHistory();
+            lucide.createIcons();
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
+            if (savedTheme === "dark") {
+                document.documentElement.classList.add("dark");
+                document.getElementById("themeIconMoon").classList.add("hidden");
+                document.getElementById("themeIconSun").classList.remove("hidden");
+            }
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.toggle("dark");
+            localStorage.setItem(STORAGE_KEYS.THEME, isDark ? "dark" : "light");
+            document.getElementById("themeIconMoon").classList.toggle("hidden", isDark);
+            document.getElementById("themeIconSun").classList.toggle("hidden", !isDark);
+        }
+
+        function loadAllState() {
+            try {
+                const rawRides = localStorage.getItem(STORAGE_KEYS.RIDES);
+                rides = rawRides ? JSON.parse(rawRides) : [...DEFAULT_RIDES];
+                if (!rawRides) saveRides();
+
+                const rawBookings = localStorage.getItem(STORAGE_KEYS.BOOKINGS);
+                bookings = rawBookings ? JSON.parse(rawBookings) : [];
+
+                const rawDriver = localStorage.getItem(STORAGE_KEYS.DRIVER);
+                driverProfile = rawDriver ? JSON.parse(rawDriver) : null;
+
+                updateTripBadges();
+            } catch (err) {
+                console.error("State load error:", err);
+                rides = [...DEFAULT_RIDES];
+            }
+        }
+
+        function saveRides() { localStorage.setItem(STORAGE_KEYS.RIDES, JSON.stringify(rides)); }
+        function saveBookings() { localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings)); updateTripBadges(); }
+        function saveDriver() { localStorage.setItem(STORAGE_KEYS.DRIVER, JSON.stringify(driverProfile)); }
+
+        function populateSelects() {
+            const dl = document.getElementById("placesDatalist");
+            if (dl) {
+                dl.innerHTML = PLACES.map(p => `<option value="${p}"></option>`).join("");
+            }
+        }
+
+        function switchTab(tab) {
+            const views = ["home", "ai", "driver", "post", "trips", "admin"];
+            views.forEach(v => {
+                document.getElementById(`view-${v}`).classList.toggle("hidden", v !== tab);
+            });
+
+            document.querySelectorAll(".nav-tab-desktop").forEach(btn => {
+                const active = btn.dataset.nav === tab;
+                btn.className = active
+                    ? "nav-tab-desktop relative flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold bg-white text-blue-950 shadow-sm transition-all"
+                    : "nav-tab-desktop relative flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-extrabold text-sky-100 hover:bg-white/10 transition-all";
+            });
+
+            document.querySelectorAll(".mnav-btn").forEach(btn => {
+                const active = btn.dataset.mnav === tab;
+                btn.className = active
+                    ? "mnav-btn relative flex flex-col items-center justify-center py-1.5 rounded-xl text-blue-900 dark:text-amber-400 font-black"
+                    : "mnav-btn relative flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-500 dark:text-slate-400 font-bold";
+            });
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            lucide.createIcons();
+        }
+
+        function handlePostNavClick() {
+            if (!driverProfile) {
+                showToast("⚠️ Зар оруулахын тулд иргэний үнэмлэхээр баталгаажуулна уу!");
+                switchTab("driver");
+                return;
+            }
+            populateLockedPostForm();
+            switchTab("post");
+        }
+
+        function simulateIdCardUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            document.getElementById("idScanStatus").classList.remove("hidden");
+            document.getElementById("regFullName").value = "Доржийн Батбаяр";
+            document.getElementById("regNumber").value = "УШ92011215";
+            document.getElementById("regPhone").value = "99112233";
+            showToast("🔍 Иргэний үнэмлэх амжилттай уншигдлаа!");
+        }
+
+        function updateDriverUIState() {
+            const headerText = document.getElementById("headerDriverText");
+            const cardView = document.getElementById("verifiedDriverCardView");
+            const regBox = document.getElementById("driverRegistrationBox");
+
+            if (driverProfile) {
+                headerText.textContent = `${driverProfile.fullName.split(" ").pop()} ✅`;
+                cardView.classList.remove("hidden");
+                regBox.classList.add("hidden");
+
+                document.getElementById("drvCardInitial").textContent = driverProfile.fullName.charAt(0).toUpperCase();
+                document.getElementById("drvCardName").textContent = driverProfile.fullName;
+                document.getElementById("drvCardId").textContent = `Регистр: ${driverProfile.regNumber}`;
+                document.getElementById("drvCardVehicle").textContent = driverProfile.vehicle;
+                document.getElementById("drvCardPlate").textContent = driverProfile.plate;
+                document.getElementById("drvCardPhone").textContent = formatPhone(driverProfile.phone);
+                document.getElementById("drvCardEmergency").textContent = formatPhone(driverProfile.emergencyPhone);
+                document.getElementById("drvCardRatingDisplay").textContent = driverProfile.driverRating || "5.0";
+                document.getElementById("drvCardReviewCount").textContent = `${driverProfile.reviewCount || 0} үнэлгээтэй`;
+            } else {
+                headerText.textContent = "Үнэмлэх";
+                cardView.classList.add("hidden");
+                regBox.classList.remove("hidden");
+            }
+            lucide.createIcons();
+        }
+
+        function editDriverProfile() {
+            if (!driverProfile) return;
+            document.getElementById("regFullName").value = driverProfile.fullName;
+            document.getElementById("regNumber").value = driverProfile.regNumber;
+            document.getElementById("regPhone").value = driverProfile.phone;
+            document.getElementById("regVehicle").value = driverProfile.vehicle;
+            document.getElementById("regPlate").value = driverProfile.plate;
+            document.getElementById("regEmergencyPhone").value = driverProfile.emergencyPhone;
+            document.getElementById("regPledge").checked = true;
+
+            document.getElementById("verifiedDriverCardView").classList.add("hidden");
+            document.getElementById("driverRegistrationBox").classList.remove("hidden");
+        }
+
+        function saveDriverRegistration(e) {
+            e.preventDefault();
+            const fullName = document.getElementById("regFullName").value.trim();
+            const regNumber = document.getElementById("regNumber").value.trim().toUpperCase();
+            const phone = document.getElementById("regPhone").value.trim();
+            const vehicle = document.getElementById("regVehicle").value.trim();
+            const plate = document.getElementById("regPlate").value.trim().toUpperCase();
+            const emergencyPhone = document.getElementById("regEmergencyPhone").value.trim();
+
+            if (phone === emergencyPhone) {
+                showToast("⚠️ Өөрийн дугаар болон гэр бүлийн дугаар өөр байх ёстой!");
+                return;
+            }
+
+            driverProfile = {
+                driverId: driverProfile?.driverId || `#DRV-${Math.floor(10000 + Math.random() * 90000)}`,
+                fullName,
+                regNumber,
+                phone,
+                vehicle,
+                plate,
+                emergencyPhone,
+                driverRating: driverProfile?.driverRating || 5.0,
+                reviewCount: driverProfile?.reviewCount || 12,
+                verifiedAt: new Date().toISOString()
+            };
+
+            saveDriver();
+            updateDriverUIState();
+            showToast("✅ Иргэний үнэмлэх болон жолоочийн эрх амжилттай баталгаажлаа!");
+        }
+
+        function populateLockedPostForm() {
+            if (!driverProfile) return;
+            document.getElementById("postLockedDriverInfo").textContent =
+                `${driverProfile.fullName} (${driverProfile.regNumber}) • ${driverProfile.vehicle} [${driverProfile.plate}]`;
+        }
+
+        function submitNewRide(e) {
+            e.preventDefault();
+            if (!driverProfile) {
+                switchTab("driver");
+                return;
+            }
+
+            const origin = document.getElementById("postOrigin").value.trim();
+            const destination = document.getElementById("postDest").value.trim();
+            if (!origin || !destination) {
+                showToast("⚠️ Хөдлөх болон очих чиглэлээ бичнэ үү!");
+                return;
+            }
+            if (origin.toLowerCase() === destination.toLowerCase()) {
+                showToast("⚠️ Хөдлөх болон очих газар ижил байж болохгүй!");
+                return;
+            }
+
+            const pickupPoint = document.getElementById("postPickupPoint").value;
+            const day = document.getElementById("postDay").value;
+            const time = document.getElementById("postTime").value;
+            const availCount = parseInt(document.getElementById("postSeats").value, 10);
+            const seatPrice = parseInt(document.getElementById("postSeatPrice").value, 10) || 50000;
+            const takesCargo = document.getElementById("postTakesCargo").checked;
+            const cargoPrice = parseInt(document.getElementById("postCargoPrice").value, 10) || 15000;
+            const notes = document.getElementById("postNotes").value.trim();
+
+            const allSeatKeys = ["front", "back_left", "back_mid", "back_right"];
+            const takenCount = Math.max(0, 4 - availCount);
+            const takenSeats = allSeatKeys.slice(4 - takenCount);
+
+            const newRide = {
+                id: "ride-" + Date.now(),
+                origin,
+                destination,
+                day,
+                time,
+                driverName: driverProfile.fullName,
+                regNumber: driverProfile.regNumber,
+                driverRating: driverProfile.driverRating || 5.0,
+                reviewCount: driverProfile.reviewCount || 12,
+                verified: true,
+                vehicle: driverProfile.vehicle,
+                plate: driverProfile.plate,
+                pickupPoint,
+                seatPrice,
+                takesCargo,
+                cargoPrice,
+                phone: driverProfile.phone,
+                takenSeats,
+                notes: notes || `${pickupPoint}-ээс хөдөлнө.`,
+                flagged: false
+            };
+
+            rides.unshift(newRide);
+            saveRides();
+            document.getElementById("newRideForm").reset();
+            resetAllFilters();
+            switchTab("home");
+            showToast("✅ Таны зар амжилттай нийтлэгдлээ!");
+        }
+
+        function swapRouteLocations() {
+            const o = document.getElementById("filterOrigin");
+            const d = document.getElementById("filterDest");
+            const tmp = o.value;
+            o.value = d.value;
+            d.value = tmp;
+            onRouteChange();
+        }
+
+        function onRouteChange() {
+            const o = document.getElementById("filterOrigin").value.trim();
+            const d = document.getElementById("filterDest").value.trim();
+            const key = `${o}|${d}`;
+            const intel = ROUTE_INTEL[key];
+
+            const tagEl = document.getElementById("intelRouteTag");
+            const distEl = document.getElementById("intelDistance");
+            const priceEl = document.getElementById("intelAvgPrice");
+            const weatherEl = document.getElementById("intelWeatherText");
+
+            if (intel) {
+                tagEl.textContent = `${o.split(" - ").pop()} ➔ ${d.split(" - ").pop()}`;
+                distEl.textContent = `${intel.km} • ~${intel.time}`;
+                priceEl.textContent = `Дундаж үнэ: ${intel.price}`;
+                weatherEl.textContent = intel.weather;
+            } else if (o !== "" || d !== "") {
+                tagEl.textContent = `${o === "" ? "Бүх чиглэл" : o} ➔ ${d === "" ? "Бүх чиглэл" : d}`;
+                distEl.textContent = "Орон нутгийн шууд чиглэл";
+                priceEl.textContent = "Баталгаат тариф";
+                weatherEl.textContent = "☀️ Замын хөдөлгөөн хэвийн. Камертай цэгээс хөдөлнө.";
+            } else {
+                tagEl.textContent = "Орон нутгийн нэгдсэн сүлжээ";
+                distEl.textContent = "21 аймаг • 330 сум";
+                priceEl.textContent = "Дундаж тариф: 35,000₮ - 95,000₮";
+                weatherEl.textContent = "☀️ Засмал болон хөдөөгийн зам цаг агаар тогтуун байна.";
+            }
+
+            renderRidesFeed();
+        }
+
+        function setQuickFilter(filter) {
+            currentQuickFilter = filter;
+            document.querySelectorAll(".qfilter-btn").forEach(btn => {
+                const active = btn.dataset.qfilter === filter;
+                btn.className = active
+                    ? "qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-blue-900 text-white dark:bg-amber-500 dark:text-slate-950 shadow-xs flex items-center gap-1.5 transition-all"
+                    : "qfilter-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-extrabold bg-slate-100 dark:bg-steppe-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 flex items-center gap-1.5 transition-all";
+            });
+            renderRidesFeed();
+        }
+
+        function resetAllFilters() {
+            document.getElementById("filterOrigin").value = "";
+            document.getElementById("filterDest").value = "";
+            setQuickFilter("ALL");
+            onRouteChange();
+        }
+
+        function renderRidesFeed() {
+            const container = document.getElementById("ridesFeedContainer");
+            const o = document.getElementById("filterOrigin").value.trim().toLowerCase();
+            const d = document.getElementById("filterDest").value.trim().toLowerCase();
+
+            const hasFilter = o !== "" || d !== "" || currentQuickFilter !== "ALL";
+            document.getElementById("clearFiltersBtn").classList.toggle("hidden", !hasFilter);
+
+            const filtered = rides.filter(r => {
+                if (r.flagged) return false;
+                if (o !== "" && !r.origin.toLowerCase().includes(o)) return false;
+                if (d !== "" && !r.destination.toLowerCase().includes(d)) return false;
+
+                const availSeats = 4 - (r.takenSeats?.length || 0);
+                if (currentQuickFilter === "SEATS" && availSeats <= 0) return false;
+                if (currentQuickFilter === "CARGO" && !r.takesCargo) return false;
+                if (currentQuickFilter === "VERIFIED" && !r.verified) return false;
+                return true;
+            });
+
+            document.getElementById("feedCountBadge").textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-steppe-900 rounded-3xl p-8 text-center border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 dark:bg-steppe-800 text-slate-400 flex items-center justify-center mx-auto">
+                            <i data-lucide="search-x" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-lg font-black">Тохирох баталгаат унаа олдсонгүй</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto">Та чиглэлээ өөрчлөх эсвэл шинэ зар оруулаарай.</p>
+                        <button onclick="resetAllFilters()" class="px-5 py-2.5 rounded-xl bg-blue-900 dark:bg-amber-500 text-white dark:text-slate-950 font-extrabold text-sm">Бүх зарыг харах</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(r => {
+                const availSeats = Math.max(0, 4 - (r.takenSeats?.length || 0));
+                const seatDots = [0, 1, 2, 3].map(idx => {
+                    const isFree = idx < availSeats;
+                    return `<span class="w-3 h-3 rounded-full ${isFree ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}"></span>`;
+                }).join("");
+
+                return `
+                <article class="bg-white dark:bg-steppe-900 rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200/90 dark:border-slate-800 space-y-3.5 transition-all">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black ${r.day === 'Өнөөдөр' ? 'bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-300' : 'bg-blue-50 text-blue-900 dark:bg-blue-950 dark:text-sky-300'}">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            <span>${escapeHtml(r.day)}, ${escapeHtml(r.time)}</span>
+                        </span>
+                        <div class="text-right">
+                            <span class="text-lg sm:text-xl font-black text-blue-950 dark:text-amber-400">${r.seatPrice.toLocaleString()}₮</span>
+                            <span class="text-[11px] text-slate-400 font-bold block leading-none">/ 1 суудал</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-steppe-800/80 rounded-2xl p-3.5 border border-slate-200/70 dark:border-slate-700/80 space-y-2">
+                        <div class="flex flex-wrap items-center gap-2 text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                            <span>${escapeHtml(r.origin)}</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-amber-500 shrink-0"></i>
+                            <span>${escapeHtml(r.destination)}</span>
+                        </div>
+                        <div class="text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
+                            <span>${escapeHtml(r.pickupPoint)}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-900 to-sky-700 text-white font-black flex items-center justify-center text-base shrink-0">
+                                ${escapeHtml(r.driverName.charAt(0))}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-black text-sm sm:text-base">${escapeHtml(r.driverName)}</span>
+                                    <span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px] font-black">
+                                        <i data-lucide="id-card" class="w-3.5 h-3.5"></i> Үнэмлэхтэй ✅
+                                    </span>
+                                </div>
+                                <div class="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5">
+                                    <span class="text-amber-500 font-black flex items-center gap-0.5">
+                                        <i data-lucide="star" class="w-3 h-3 fill-amber-500"></i> ${r.driverRating} (${r.reviewCount || 0})
+                                    </span>
+                                    <span>• ${escapeHtml(r.vehicle)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-black text-xs plate-badge border border-slate-400">
+                            ${escapeHtml(r.plate)}
+                        </span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-extrabold text-emerald-900 dark:text-emerald-300">
+                            <div class="flex items-center gap-1">${seatDots}</div>
+                            <span>${availSeats > 0 ? `${availSeats} суудал сул` : 'Суудал дүүрсэн'}</span>
+                        </div>
+                        ${r.takesCargo ? `
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs font-extrabold text-amber-900 dark:text-amber-300">
+                                <i data-lucide="package" class="w-3.5 h-3.5 text-amber-600"></i>
+                                <span>Дайвар авна (${r.cargoPrice.toLocaleString()}₮+)</span>
+                            </span>
+                        ` : ''}
+                    </div>
+
+                    ${r.notes ? `<p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHtml(r.notes)}</p>` : ''}
+
+                    <div class="grid grid-cols-5 gap-2 pt-1">
+                        <button onclick="openCallDriverModal('${r.id}')" class="col-span-2 py-3.5 px-3 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-steppe-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-extrabold text-sm flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700 transition-all">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-600"></i><span>Залгах</span>
+                        </button>
+                        <button onclick="openSafeBookingModal('${r.id}')" class="col-span-3 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600 dark:from-amber-500 dark:to-amber-600 dark:text-slate-950 text-white font-black text-sm flex items-center justify-center gap-1.5 shadow-md transition-all active:scale-[0.98]">
+                            <i data-lucide="armchair" class="w-4 h-4"></i><span>Захиалах / Дайвар</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-0.5">
+                        ${isAdminLoggedIn ? `
+                            <button onclick="adminDeleteRide('${r.id}')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-black flex items-center gap-1 shadow-xs">
+                                <span>🗑️ Админ: Устгах</span>
+                            </button>
+                        ` : '<span></span>'}
+                        <button onclick="openScamModal('${r.id}')" class="text-[11px] font-bold text-slate-400 hover:text-rose-600 flex items-center gap-1 transition-colors">
+                            <span>⚠️ Сэжигтэй зар мэдээлэх</span>
+                        </button>
+                    </div>
+                </article>
+                `;
+            }).join("");
+
+            lucide.createIcons();
+        }
+
+        // ==================== GEMINI AI CHATBOT LOGIC (NEW) ====================
+        function sendQuickPrompt(text) {
+            document.getElementById("aiChatInput").value = text;
+            handleAiChatSubmit(new Event('submit'));
+        }
+
+        function handleAiChatSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById("aiChatInput");
+            const userMsg = inputEl.value.trim();
+            if (!userMsg) return;
+
+            appendChatMessage("user", userMsg);
+            inputEl.value = "";
+
+            // Simulate AI thinking and generating smart response
+            setTimeout(() => {
+                const aiReply = generateAiResponse(userMsg);
+                appendChatMessage("ai", aiReply);
+            }, 600);
+        }
+
+        function appendChatMessage(sender, text) {
+            const container = document.getElementById("aiChatMessages");
+            const isUser = sender === "user";
+
+            const bubbleHtml = isUser ? `
+                <div class="flex items-start justify-end gap-2.5">
+                    <div class="bg-blue-900 dark:bg-amber-500 text-white dark:text-slate-950 rounded-2xl rounded-tr-xs p-3.5 text-xs sm:text-sm max-w-[85%] leading-relaxed">
+                        ${escapeHtml(text)}
+                    </div>
+                    <div class="w-8 h-8 rounded-xl bg-blue-950 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">Та</div>
+                </div>
+            ` : `
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">AI</div>
+                    <div class="bg-slate-100 dark:bg-steppe-800 rounded-2xl rounded-tl-xs p-3.5 text-xs sm:text-sm text-slate-800 dark:text-slate-100 max-w-[85%] leading-relaxed space-y-1.5">
+                        ${text}
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', bubbleHtml);
+            container.scrollTop = container.scrollHeight;
+
+            chatHistory.push({ sender, text, time: Date.now() });
+            localStorage.setItem(STORAGE_KEYS.CHAT, JSON.stringify(chatHistory));
+            lucide.createIcons();
+        }
+
+        function loadChatHistory() {
+            const raw = localStorage.getItem(STORAGE_KEYS.CHAT);
+            if (!raw) return;
+            try {
+                chatHistory = JSON.parse(raw);
+                if (chatHistory.length > 0) {
+                    const container = document.getElementById("aiChatMessages");
+                    // Keep default welcome message, append historical
+                    chatHistory.forEach(item => {
+                        const isUser = item.sender === "user";
+                        const bubbleHtml = isUser ? `
+                            <div class="flex items-start justify-end gap-2.5">
+                                <div class="bg-blue-900 dark:bg-amber-500 text-white dark:text-slate-950 rounded-2xl rounded-tr-xs p-3.5 text-xs sm:text-sm max-w-[85%] leading-relaxed">
+                                    ${escapeHtml(item.text)}
+                                </div>
+                                <div class="w-8 h-8 rounded-xl bg-blue-950 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">Та</div>
+                            </div>
+                        ` : `
+                            <div class="flex items-start gap-2.5">
+                                <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">AI</div>
+                                <div class="bg-slate-100 dark:bg-steppe-800 rounded-2xl rounded-tl-xs p-3.5 text-xs sm:text-sm text-slate-800 dark:text-slate-100 max-w-[85%] leading-relaxed space-y-1.5">
+                                    ${item.text}
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', bubbleHtml);
+                    });
+                    container.scrollTop = container.scrollHeight;
+                }
+            } catch (err) {
+                console.error("Chat load error:", err);
+            }
+        }
+
+        function clearAiChat() {
+            chatHistory = [];
+            localStorage.removeItem(STORAGE_KEYS.CHAT);
+            document.getElementById("aiChatMessages").innerHTML = `
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-xs shrink-0 mt-0.5">AI</div>
+                    <div class="bg-slate-100 dark:bg-steppe-800 rounded-2xl rounded-tl-xs p-3.5 text-xs sm:text-sm text-slate-800 dark:text-slate-100 max-w-[85%] leading-relaxed">
+                        Чат цэвэрлэгдлээ. Та шинээр асуултаа асууна уу!
+                    </div>
+                </div>
+            `;
+            showToast("🧹 Чат хоосорлоо.");
+        }
+
+        function generateAiResponse(query) {
+            const q = query.toLowerCase();
+            if (q.includes("мөст")) {
+                return `🏔️ <b>Мөст сумаас явах чиглэлийн мэдээлэл:</b><br>
+                • <b>Мөст сум ➔ Ховд (Жаргалант):</b> Жолооч Ц.Батболд (UAZ Fourgon, 33-45 ХОВ), ЗДТГ-ын өмнөх талбайгаас 08:00 цагт хөдөлнө (35,000₮).<br>
+                • <b>Мөст сум ➔ Булган сум:</b> Land Cruiser 80 машин явна (45,000₮).<br>
+                • Та Мөст сумаас аль ч сум эсвэл аймгийн төв рүү зар оруулах болон унаа захиалах боломжтой! <button onclick="switchTab('home')" class="text-blue-600 dark:text-amber-400 font-bold underline mt-1 block">Унаа хайх руу орох ➔</button>`;
+            } else if (q.includes("ховд") || q.includes("булган") || q.includes("манхан") || q.includes("зэрэг") || q.includes("үенч") || q.includes("цэцэг") || q.includes("мянгад") || q.includes("дуут") || q.includes("буянт") || q.includes("алтай") || q.includes("дарви") || q.includes("дөргөн") || q.includes("мөнххайрхан") || q.includes("чандмань") || q.includes("эрдэнэбүрэн")) {
+                return `🏔️ <b>Ховд аймаг болон сумдын чиглэлийн мэдээлэл:</b><br>
+                • <b>Ховд (Жаргалант) ➔ Мөст сум:</b> Жолооч Г.Тэмүүлэн (Land Cruiser Prado 150, 45-67 ХОА), үнэ 35,000₮, үнэмлэхтэй ✅.<br>
+                • <b>Ховд (Жаргалант) ➔ Булган сум:</b> Манхан, Зэрэг, Үенч дайрч явна (55,000₮).<br>
+                • Ховдын бүх 16 сум болон аймгийн төв хоорондын чиглэлүүд "Унаа хайх" цэсэнд орсон байна. <button onclick="switchTab('home')" class="text-blue-600 dark:text-amber-400 font-bold underline mt-1 block">Ховдын унаанууд харах ➔</button>`;
+            } else if (q.includes("архангай") || q.includes("тариат")) {
+                return `🚗 <b>Архангай / Тариат чиглэлийн мэдээлэл:</b><br>
+                • Одоогоор <b>ДБатбаяр (Toyota Land Cruiser 200, 12-34 УБА)</b> гэдэг жолооч 65,000₮-өөр үнэмлэхтэйгээр бүртгүүлсэн байна.<br>
+                • Уулзах цэг: <i>Драгон төвийн төв зогсоол (Камертай)</i>.<br>
+                • Цаг агаар: Цагаан даваа орчимд цастай тул дулаан хувцаслаарай. <button onclick="switchTab('home')" class="text-blue-600 dark:text-amber-400 font-bold underline mt-1 block">Унаа руу очих ➔</button>`;
+            } else if (q.includes("цаг агаар") || q.includes("зам")) {
+                return `⛅ <b>Зам болон цаг агаарын нөхцөл:</b><br>
+                • Улаанбаатар - Баруун болон хойд чиглэлийн замууд хэвийн.<br>
+                • Цагаан даваа, Хөвсгөлийн чиглэлд зарим хэсгээр хальтиргаатай тул баталгаажсан жолооч сонгохыг зөвлөж байна.`;
+            } else if (q.includes("хуурамч") || q.includes("залилан") || q.includes("аюулгүй")) {
+                return `🛡️ <b>Залилангаас сэргийлэх AI зөвлөгөө:</b><br>
+                1. Хэзээ ч урьдчилгаа мөнгө бүү шилжүүл!<br>
+                2. Апп дотроос жолоочийн <b>иргэний үнэмлэхний дугаар ✅</b> болон одтой үнэлгээг шалгаарай.<br>
+                3. Заавал камертай цэгээс (Жишээ нь: Драгон төв) сууж, гэр бүлийн хүний дугаарыг SOS хэсэгт бүртгээрэй.`;
+            } else {
+                return `💡 Таны <i>"${escapeHtml(query)}"</i> гэсэн асуултад орон нутгийн тээврийн нэгдсэн сангаас хайлаа:<br>
+                Та манай апп-ын <b>"Унаа хайх"</b> цэснээс өөрийн явах сум, аймаг сонгоод баталгаажсан жолооч нартай шууд холбогдох боломжтой. Өөр асуух зүйл байна уу?`;
+            }
+        }
+
+        function openSafeBookingModal(rideId) {
+            const ride = rides.find(r => r.id === rideId);
+            if (!ride) return;
+
+            selectedSeatsInModal = [];
+            document.getElementById("modalTripId").value = ride.id;
+            document.getElementById("modalPlatePill").textContent = ride.plate;
+            document.getElementById("modalTitle").textContent = `${ride.origin} ➔ ${ride.destination}`;
+            document.getElementById("modalSub").textContent = `${ride.driverName} • ${ride.day}, ${ride.time}`;
+            document.getElementById("bookingPickupSelect").value = ride.pickupPoint;
+
+            const frontPrice = Math.round(ride.seatPrice * 1.2);
+            document.getElementById("priceFrontLabel").textContent = `${frontPrice.toLocaleString()}₮`;
+            document.querySelectorAll(".back-seat-price").forEach(el => {
+                el.textContent = `${ride.seatPrice.toLocaleString()}₮`;
+            });
+
+            renderCabinSeatButtons(ride);
+
+            const availSeats = 4 - (ride.takenSeats?.length || 0);
+            if (availSeats <= 0 && ride.takesCargo) {
+                switchBookingMode("cargo");
+            } else {
+                switchBookingMode("seat");
+            }
+
+            document.getElementById("bookingModal").classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        function closeBookingModal() {
+            document.getElementById("bookingModal").classList.add("hidden");
+        }
+
+        function switchBookingMode(mode) {
+            document.getElementById("bookingModeInput").value = mode;
+            const seatBtn = document.getElementById("modeSeatBtn");
+            const cargoBtn = document.getElementById("modeCargoBtn");
+            const cabinSec = document.getElementById("cabinSelectorSection");
+            const cargoSec = document.getElementById("cargoSelectorSection");
+            const cargoInput = document.getElementById("cargoNoteInput");
+
+            if (mode === "seat") {
+                seatBtn.className = "py-2.5 px-3 rounded-xl font-extrabold text-sm bg-white dark:bg-steppe-900 text-blue-900 dark:text-amber-400 shadow-xs flex items-center justify-center gap-1.5 transition-all";
+                cargoBtn.className = "py-2.5 px-3 rounded-xl font-extrabold text-sm text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-all";
+                cabinSec.classList.remove("hidden");
+                cargoSec.classList.add("hidden");
+                cargoInput.required = false;
+            } else {
+                cargoBtn.className = "py-2.5 px-3 rounded-xl font-extrabold text-sm bg-white dark:bg-steppe-900 text-amber-700 dark:text-amber-400 shadow-xs flex items-center justify-center gap-1.5 transition-all";
+                seatBtn.className = "py-2.5 px-3 rounded-xl font-extrabold text-sm text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1.5 transition-all";
+                cabinSec.classList.add("hidden");
+                cargoSec.classList.remove("hidden");
+                cargoInput.required = true;
+            }
+        }
+
+        function renderCabinSeatButtons(ride) {
+            const seatLabels = { front: "Урд суудал", back_left: "Хойд зүүн", back_mid: "Хойд дунд", back_right: "Хойд баруун" };
+            document.querySelectorAll(".seat-btn").forEach(btn => {
+                const seatKey = btn.dataset.seat;
+                const isTaken = (ride.takenSeats || []).includes(seatKey);
+                const isSelected = selectedSeatsInModal.includes(seatKey);
+
+                btn.disabled = isTaken;
+                if (isTaken) {
+                    btn.className = "seat-btn p-2.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-200/70 dark:bg-steppe-900/60 text-slate-400 cursor-not-allowed opacity-60 text-center";
+                } else if (isSelected) {
+                    btn.className = "seat-btn p-2.5 rounded-2xl border-2 border-emerald-500 bg-emerald-500 text-white shadow-md text-center";
+                } else {
+                    btn.className = "seat-btn p-2.5 rounded-2xl border-2 border-blue-200 dark:border-slate-600 bg-white dark:bg-steppe-900 text-slate-800 dark:text-slate-100 hover:border-blue-500 text-center";
+                }
+            });
+
+            const summaryEl = document.getElementById("selectedSeatsSummary");
+            if (selectedSeatsInModal.length === 0) {
+                summaryEl.textContent = "Сонгосон суудал: Байхгүй (Дээрх суудлаас дарна уу)";
+            } else {
+                const names = selectedSeatsInModal.map(k => seatLabels[k]).join(", ");
+                summaryEl.textContent = `✅ Сонгосон: ${names} (${selectedSeatsInModal.length} суудал)`;
+            }
+        }
+
+        function toggleSeatSelect(seatKey) {
+            const rideId = document.getElementById("modalTripId").value;
+            const ride = rides.find(r => r.id === rideId);
+            if (!ride) return;
+
+            const idx = selectedSeatsInModal.indexOf(seatKey);
+            if (idx > -1) {
+                selectedSeatsInModal.splice(idx, 1);
+            } else {
+                selectedSeatsInModal.push(seatKey);
+            }
+            renderCabinSeatButtons(ride);
+        }
+
+        function selectCargoPreset(text) {
+            document.getElementById("cargoNoteInput").value = text;
+        }
+
+        function submitSafeBooking(e) {
+            e.preventDefault();
+            const rideId = document.getElementById("modalTripId").value;
+            const ride = rides.find(r => r.id === rideId);
+            if (!ride) return;
+
+            const mode = document.getElementById("bookingModeInput").value;
+            const pickupPoint = document.getElementById("bookingPickupSelect").value;
+            const bookerName = document.getElementById("bookerNameInput").value.trim();
+            const bookerPhone = document.getElementById("bookerPhoneInput").value.trim();
+            const familyPhone = document.getElementById("familyEmergencyInput").value.trim();
+
+            if (bookerPhone === familyPhone) {
+                showToast("⚠️ Өөрийн болон гэр бүлийн дугаар өөр байх ёстой!");
+                return;
+            }
+
+            let detailText = "";
+            let totalPrice = 0;
+
+            if (mode === "seat") {
+                if (selectedSeatsInModal.length === 0) {
+                    showToast("⚠️ Дор хаяж 1 суудал сонгоно уу!");
+                    return;
+                }
+                const seatMapNames = { front: "Урд суудал", back_left: "Хойд зүүн", back_mid: "Хойд дунд", back_right: "Хойд баруун" };
+                selectedSeatsInModal.forEach(s => {
+                    if (!ride.takenSeats.includes(s)) ride.takenSeats.push(s);
+                    totalPrice += (s === "front") ? Math.round(ride.seatPrice * 1.2) : ride.seatPrice;
+                });
+                detailText = `Суудал: ${selectedSeatsInModal.map(s => seatMapNames[s]).join(", ")}`;
+            } else {
+                const cargoNote = document.getElementById("cargoNoteInput").value.trim();
+                detailText = `📦 Дайвар: ${cargoNote}`;
+                totalPrice = ride.cargoPrice;
+            }
+
+            const securityCode = `#MN-${Math.floor(1000 + Math.random() * 9000)}`;
+            const newTicket = {
+                id: "tkt-" + Date.now(),
+                securityCode,
+                rideId: ride.id,
+                route: `${ride.origin} ➔ ${ride.destination}`,
+                dateTime: `${ride.day}, ${ride.time}`,
+                driverName: ride.driverName,
+                driverPhone: ride.phone,
+                vehicle: ride.vehicle,
+                plate: ride.plate,
+                pickupPoint,
+                detail: detailText,
+                totalPrice,
+                bookerName,
+                bookerPhone,
+                familyPhone,
+                stage: 1,
+                rated: false
+            };
+
+            bookings.unshift(newTicket);
+            saveRides();
+            saveBookings();
+
+            closeBookingModal();
+            renderRidesFeed();
+            renderMyTrips();
+            switchTab("trips");
+            showToast(`🎫 Тасалбар ${securityCode} баталгаажлаа!`);
+        }
+
+        function updateTripStage(ticketId, stage) {
+            const ticket = bookings.find(b => b.id === ticketId);
+            if (!ticket) return;
+            ticket.stage = stage;
+            saveBookings();
+            renderMyTrips();
+            const labels = { 1: "Баталгаажсан", 2: "Замд яваа", 3: "Очих газартаа хүрсэн" };
+            showToast(`Аяллын явц: ${labels[stage]}`);
+            
+            if (stage === 3 && !ticket.rated) {
+                openRatingModal(ticketId);
+            }
+        }
+
+        function openRatingModal(ticketId) {
+            const ticket = bookings.find(b => b.id === ticketId);
+            if (!ticket) return;
+
+            document.getElementById("ratingTicketIdInput").value = ticket.id;
+            document.getElementById("ratingDriverNameInput").value = ticket.driverName;
+            document.getElementById("ratingDriverMeta").textContent = `Жолооч: ${ticket.driverName} (${ticket.plate})`;
+            setRatingStars(5);
+            document.getElementById("ratingCommentInput").value = "";
+            document.getElementById("ratingModal").classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        function setRatingStars(starCount) {
+            document.getElementById("selectedStarValue").value = starCount;
+            const buttons = document.querySelectorAll("#starPickerContainer button");
+            buttons.forEach((btn, idx) => {
+                if (idx < starCount) {
+                    btn.className = "star-btn p-2 text-amber-400 transition-colors";
+                } else {
+                    btn.className = "star-btn p-2 text-slate-300 dark:text-slate-700 transition-colors";
+                }
+            });
+        }
+
+        function submitDriverRating() {
+            const ticketId = document.getElementById("ratingTicketIdInput").value;
+            const driverName = document.getElementById("ratingDriverNameInput").value;
+            const stars = parseInt(document.getElementById("selectedStarValue").value, 10);
+            const comment = document.getElementById("ratingCommentInput").value.trim();
+
+            const ticket = bookings.find(b => b.id === ticketId);
+            if (ticket) {
+                ticket.rated = true;
+                ticket.ratingGiven = stars;
+                ticket.commentGiven = comment;
+                saveBookings();
+            }
+
+            if (driverProfile && driverProfile.fullName === driverName) {
+                const currentRating = driverProfile.driverRating || 5.0;
+                const count = driverProfile.reviewCount || 1;
+                const newAvg = Number(((currentRating * count + stars) / (count + 1)).toFixed(1));
+                driverProfile.driverRating = newAvg;
+                driverProfile.reviewCount = count + 1;
+                saveDriver();
+                updateDriverUIState();
+            }
+
+            rides.forEach(r => {
+                if (r.driverName === driverName) {
+                    const cr = r.driverRating || 5.0;
+                    const rc = r.reviewCount || 1;
+                    r.driverRating = Number(((cr * rc + stars) / (rc + 1)).toFixed(1));
+                    r.reviewCount = rc + 1;
+                }
+            });
+            saveRides();
+
+            document.getElementById("ratingModal").classList.add("hidden");
+            renderMyTrips();
+            renderRidesFeed();
+            showToast(`⭐ Жолоочид ${stars} одны үнэлгээ амжилттай өглөө. Баярлалаа!`);
+        }
+
+        function updateTripBadges() {
+            document.querySelectorAll(".trip-badge").forEach(el => {
+                if (bookings.length > 0) {
+                    el.textContent = bookings.length;
+                    el.classList.remove("hidden");
+                } else {
+                    el.classList.add("hidden");
+                }
+            });
+        }
+
+        function renderMyTrips() {
+            const container = document.getElementById("myTripsContainer");
+            if (bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-steppe-900 rounded-3xl p-8 text-center border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div class="w-14 h-14 rounded-full bg-blue-50 dark:bg-steppe-800 text-blue-700 dark:text-amber-400 flex items-center justify-center mx-auto">
+                            <i data-lucide="ticket" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-lg font-black">Танд баталгаажсан тасалбар алга</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto">Захиалга хийсний дараа энд аяллын явц болон үнэлгээ өгөх цэс харагдана.</p>
+                        <button onclick="switchTab('home')" class="px-5 py-3 rounded-xl bg-blue-900 dark:bg-amber-500 text-white dark:text-slate-950 font-extrabold text-sm">Унаа хайх</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = bookings.map(b => `
+                <div class="bg-white dark:bg-steppe-900 rounded-3xl p-4 sm:p-5 shadow-md border-2 border-emerald-500/30 space-y-4">
+                    <div class="flex items-center justify-between gap-2 pb-3 border-b border-dashed border-slate-200 dark:border-slate-700">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-black">
+                                Код: ${escapeHtml(b.securityCode)}
+                            </span>
+                            <h3 class="text-base sm:text-lg font-black mt-1.5">${escapeHtml(b.route)}</h3>
+                            <p class="text-xs font-bold text-blue-800 dark:text-amber-400">${escapeHtml(b.dateTime)} • ${b.totalPrice.toLocaleString()}₮</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-black text-xs plate-badge">
+                            ${escapeHtml(b.plate)}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-500">
+                            <span>Аяллын явц (Очих газартаа хүрмэгц 3 дээр дарж үнэлгээ өгнө үү):</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <button onclick="updateTripStage('${b.id}', 1)" class="py-2 px-1.5 rounded-xl text-[11px] font-black border transition-all ${b.stage >= 1 ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-100 dark:bg-steppe-800 text-slate-400 border-transparent'}">
+                                1. Баталгаажсан
+                            </button>
+                            <button onclick="updateTripStage('${b.id}', 2)" class="py-2 px-1.5 rounded-xl text-[11px] font-black border transition-all ${b.stage >= 2 ? 'bg-amber-500 text-slate-950 border-amber-500' : 'bg-slate-100 dark:bg-steppe-800 text-slate-400 border-transparent'}">
+                                2. Замд яваа
+                            </button>
+                            <button onclick="updateTripStage('${b.id}', 3)" class="py-2 px-1.5 rounded-xl text-[11px] font-black border transition-all ${b.stage >= 3 ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-100 dark:bg-steppe-800 text-slate-400 border-transparent'}">
+                                3. Хүрсэн ✅
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-steppe-800/80 rounded-2xl p-3 text-xs sm:text-sm space-y-1.5 border border-slate-200/70 dark:border-slate-700">
+                        <div class="flex justify-between gap-2">
+                            <span class="text-slate-500">Захиалга:</span>
+                            <span class="font-extrabold text-right">${escapeHtml(b.detail)}</span>
+                        </div>
+                        <div class="flex justify-between gap-2">
+                            <span class="text-slate-500">Жолооч:</span>
+                            <span class="font-extrabold">${escapeHtml(b.driverName)} (${escapeHtml(b.vehicle)})</span>
+                        </div>
+                        <div class="flex justify-between gap-2">
+                            <span class="text-slate-500">Уулзах цэг:</span>
+                            <span class="font-bold text-emerald-700 dark:text-emerald-400 text-right">${escapeHtml(b.pickupPoint)}</span>
+                        </div>
+                        ${b.rated ? `
+                            <div class="flex justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-700 text-amber-500 font-extrabold">
+                                <span>Өгсөн үнэлгээ:</span>
+                                <span>⭐ ${b.ratingGiven} од ${b.commentGiven ? `("${escapeHtml(b.commentGiven)}")` : ''}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        ${b.stage === 3 && !b.rated ? `
+                            <button onclick="openRatingModal('${b.id}')" class="py-3.5 px-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md">
+                                <i data-lucide="star" class="w-4 h-4 fill-slate-950"></i>
+                                <span>⭐ Жолоочид үнэлгээ өгөх</span>
+                            </button>
+                        ` : `
+                            <button onclick="openFamilySafetySmsModal('${b.id}')" class="py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                <span>🛡️ Гэр бүлдээ мэдэгдэх (SMS)</span>
+                            </button>
+                        `}
+                        <a href="tel:${escapeHtml(b.driverPhone)}" class="py-3.5 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-steppe-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-600"></i><span>Жолооч руу залгах</span>
+                        </a>
+                    </div>
+                </div>
+            `).join("");
+
+            lucide.createIcons();
+        }
+
+        function openFamilySafetySmsModal(ticketId) {
+            const ticket = bookings.find(b => b.id === ticketId);
+            if (!ticket) return;
+            const cleanPickup = ticket.pickupPoint.replace("📍 ", "");
+            currentSmsBodyText = `Сайн байна уу! Би ${ticket.route} чиглэлд ${ticket.driverName} (Утас: ${ticket.driverPhone}) жолоочтой ${cleanPickup}-ээс хөдөллөө. Код: ${ticket.securityCode}. Сумын унаа PRO.`;
+
+            document.getElementById("smsTargetNumberText").textContent = `Илгээх дугаар: ${formatPhone(ticket.familyPhone)}`;
+            document.getElementById("smsPreviewBody").textContent = currentSmsBodyText;
+            document.getElementById("directSmsAnchor").href = `sms:${ticket.familyPhone}?body=${encodeURIComponent(currentSmsBodyText)}`;
+            document.getElementById("familySmsModal").classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        function copySafetySmsText() {
+            copyToClipboard(currentSmsBodyText);
+            showToast("📋 Аюулгүй байдлын текст хуулагдлаа!");
+        }
+
+        function openScamModal(rideId) {
+            const ride = rides.find(r => r.id === rideId);
+            if (!ride) return;
+            document.getElementById("scamTripIdInput").value = ride.id;
+            document.getElementById("scamTargetLabel").textContent = `${ride.driverName} • ${ride.plate}`;
+            document.getElementById("scamReportModal").classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        function confirmScamReport() {
+            const rideId = document.getElementById("scamTripIdInput").value;
+            const reasonEl = document.querySelector('input[name="scamReason"]:checked');
+            const ride = rides.find(r => r.id === rideId);
+            if (ride) {
+                ride.flagged = true;
+                ride.flagReason = reasonEl ? reasonEl.value : "Сэжигтэй зар";
+                saveRides();
+                renderRidesFeed();
+                if (isAdminLoggedIn) renderAdminPanel();
+            }
+            document.getElementById("scamReportModal").classList.add("hidden");
+            showToast("🛡️ Сэжигтэй зарыг Админ хяналт руу илгээж, нуулаа.");
+        }
+
+        // ==================== ADMIN SYSTEM LOGIC ====================
+        function openAdminPanel() {
+            if (isAdminLoggedIn) {
+                renderAdminPanel();
+                switchTab("admin");
+            } else {
+                document.getElementById("adminPasswordInput").value = "";
+                document.getElementById("adminLoginModal").classList.remove("hidden");
+                setTimeout(() => document.getElementById("adminPasswordInput").focus(), 100);
+            }
+        }
+
+        function verifyAdminPassword(e) {
+            e.preventDefault();
+            const pin = document.getElementById("adminPasswordInput").value.trim();
+            if (pin === ADMIN_PIN) {
+                isAdminLoggedIn = true;
+                localStorage.setItem(STORAGE_KEYS.ADMIN, "true");
+                document.getElementById("adminLoginModal").classList.add("hidden");
+                updateAdminHeaderState();
+                renderRidesFeed();
+                renderAdminPanel();
+                switchTab("admin");
+                showToast("🛡️ Админ эрх амжилттай нээгдлээ!");
+            } else {
+                showToast("❌ Админ нууц код буруу байна!");
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            localStorage.removeItem(STORAGE_KEYS.ADMIN);
+            updateAdminHeaderState();
+            renderRidesFeed();
+            switchTab("home");
+            showToast("Админ эрхээс гарлаа.");
+        }
+
+        function updateAdminHeaderState() {
+            const btn = document.getElementById("headerAdminBtn");
+            const txt = document.getElementById("headerAdminText");
+            if (isAdminLoggedIn) {
+                btn.classList.remove("hidden");
+                btn.className = "flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-600 text-white border border-rose-400 text-xs font-black shadow-sm transition-all";
+                txt.textContent = "Админ ✅";
+            } else {
+                btn.classList.add("hidden");
+            }
+        }
+
+        function renderAdminPanel() {
+            const container = document.getElementById("adminRidesContainer");
+            const flaggedList = rides.filter(r => r.flagged);
+            document.getElementById("adminTotalRidesCount").textContent = rides.length;
+            document.getElementById("adminFlaggedRidesCount").textContent = flaggedList.length;
+
+            if (rides.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-sm text-slate-500 bg-white dark:bg-steppe-900 rounded-2xl">Одоогоор зар алга байна.</div>`;
+                return;
+            }
+
+            // Show flagged rides first
+            const sortedRides = [...rides].sort((a, b) => (b.flagged ? 1 : 0) - (a.flagged ? 1 : 0));
+
+            container.innerHTML = sortedRides.map(r => `
+                <div class="bg-white dark:bg-steppe-900 rounded-2xl p-4 border-2 ${r.flagged ? 'border-rose-500 bg-rose-50/40 dark:bg-rose-950/20' : 'border-slate-200 dark:border-slate-800'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            ${r.flagged ? `<span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black">⚠️ СЭЖИГТЭЙ ЗАР: ${escapeHtml(r.flagReason || 'Мэдээлэгдсэн')}</span>` : `<span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-black">Хэвийн зар</span>`}
+                            <span class="text-xs font-black text-slate-500">${escapeHtml(r.day)} ${escapeHtml(r.time)}</span>
+                        </div>
+                        <div class="font-black text-sm sm:text-base">${escapeHtml(r.origin)} ➔ ${escapeHtml(r.destination)}</div>
+                        <div class="text-xs text-slate-600 dark:text-slate-400">
+                            Жолооч: <b>${escapeHtml(r.driverName)}</b> (${escapeHtml(r.regNumber || 'Бүртгэлтэй')}) • Утас: <b>${escapeHtml(r.phone)}</b> • Улсын дугаар: <b>${escapeHtml(r.plate)}</b>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        ${r.flagged ? `
+                            <button onclick="adminRestoreRide('${r.id}')" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black">
+                                ✅ Сэргээх
+                            </button>
+                        ` : ''}
+                        <button onclick="adminDeleteRide('${r.id}')" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black flex items-center gap-1 shadow-xs">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            <span>Устгах</span>
+                        </button>
+                    </div>
+                </div>
+            `).join("");
+            lucide.createIcons();
+        }
+
+        function adminDeleteRide(rideId) {
+            rides = rides.filter(r => r.id !== rideId);
+            saveRides();
+            renderRidesFeed();
+            if (isAdminLoggedIn) renderAdminPanel();
+            showToast("🗑️ Зарыг системээс бүрмөсөн устгалаа!");
+        }
+
+        function adminRestoreRide(rideId) {
+            const ride = rides.find(r => r.id === rideId);
+            if (ride) {
+                ride.flagged = false;
+                delete ride.flagReason;
+                saveRides();
+                renderRidesFeed();
+                renderAdminPanel();
+                showToast("✅ Зарыг сэргээж нийтэд харууллаа.");
+            }
+        }
+
+        function openCallDriverModal(rideId) {
+            const ride = rides.find(r => r.id === rideId);
+            if (!ride) return;
+            currentCallNumber = ride.phone;
+            document.getElementById("callModalName").textContent = ride.driverName;
+            document.getElementById("callModalMeta").textContent = `${ride.vehicle} • ${ride.plate}`;
+            document.getElementById("callModalPhone").textContent = formatPhone(ride.phone);
+            document.getElementById("callModalTelHref").href = `tel:${ride.phone}`;
+            document.getElementById("callModal").classList.remove("hidden");
+            lucide.createIcons();
+        }
+
+        function copyCallPhone() {
+            copyToClipboard(currentCallNumber);
+            showToast(`📞 Дугаар хуулагдлаа: ${formatPhone(currentCallNumber)}`);
+        }
+
+        function copyToClipboard(text) {
+            const el = document.createElement("textarea");
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+        }
+
+        function formatPhone(num) {
+            const s = String(num || "").replace(/\D/g, "");
+            return s.length === 8 ? `${s.slice(0, 4)}-${s.slice(4)}` : num;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/[']/g, "&#039;");
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const el = document.getElementById("toast");
+            document.getElementById("toastText").textContent = msg;
+            el.classList.remove("hidden");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.add("hidden"), 3500);
+        }
+
+        window.addEventListener("DOMContentLoaded", initApp);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW:', err));
+            });
+        }
+    </script>
+</body>
+</html>

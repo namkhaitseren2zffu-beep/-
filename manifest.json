@@ -1,0 +1,42 @@
+{
+  "id": "/",
+  "name": "Сумын унаа PRO: Safe & Admin Edition",
+  "short_name": "Сумын унаа",
+  "description": "Монгол орны 21 аймаг, бүх сумдын баталгаат орон нутгийн тээвэр, гараар чиглэл бичих, админ хяналт болон AI замын туслах.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070D19",
+  "theme_color": "#172554",
+  "lang": "mn",
+  "dir": "ltr",
+  "categories": [
+    "travel",
+    "navigation",
+    "transportation"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Сумын унаа PRO — Чөлөөтэй чиглэл & Админ хяналт"
+    }
+  ]
+}
